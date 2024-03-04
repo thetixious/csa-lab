@@ -56,10 +56,13 @@ def parse_literal(line, org, m_tokens) -> ParseResult:
         size, line = line.split(",", 1)
         line = line.strip()
         size = int(size)
+        m_tokens[org] = [size]
+        org += 1
         if size > len(line) + 2:
             assert ValueError("Incorrect size of string")
         line_iter += 1
         for j in range(len(line) - 2):
+            print(ord(line[line_iter]))
             m_tokens[org] = [ord(line[line_iter])]
             line_iter += 1
             org += 1
@@ -160,8 +163,9 @@ def main(code_source_file, code_target):
     lines: list[str] = []
     with open(code_source_file, encoding="utf-8") as file:
         for line in file:
-            if line.strip:
-                lines.append(line.strip())
+            if not line.strip():
+                continue
+            lines.append(line.strip())
     code = translate(lines)
     write_code(code_target, code)
 

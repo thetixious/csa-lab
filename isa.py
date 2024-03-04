@@ -4,7 +4,9 @@ import json
 from enum import Enum
 
 
-class Opcode(str,Enum):
+class Opcode(str, Enum):
+
+    AND: str = "AND"
     LD: str = "LD"
     ADD: str = "ADD"
     SUB: str = "SUB"
@@ -37,7 +39,7 @@ class Opcode(str,Enum):
 
 branch_commands: str = [Opcode.JZ, Opcode.JNZ, Opcode.JMP]
 non_operand_commands: str = [Opcode.INC, Opcode.DEC, Opcode.HLT, Opcode.POP, Opcode.PUSH]
-operand_commands: str = [Opcode.ADD, Opcode.IN, Opcode.OUT, Opcode.CALL, Opcode.CMP]
+operand_commands: str = [Opcode.ADD, Opcode.IN, Opcode.OUT, Opcode.LD, Opcode.CMP, Opcode.ST, Opcode.AND]
 
 
 def get_opcode(str_opcode) -> Opcode:
@@ -47,6 +49,7 @@ def get_opcode(str_opcode) -> Opcode:
         "add": Opcode.ADD,
         "sub": Opcode.SUB,
         "st": Opcode.ST,
+        "and": Opcode.AND,
         "dec": Opcode.DEC,
         "inc": Opcode.INC,
         "push": Opcode.PUSH,
@@ -64,13 +67,40 @@ def get_opcode(str_opcode) -> Opcode:
         "jmp": Opcode.JMP,
         "jz": Opcode.JZ,
         "jg": Opcode.JG,
-
         "jnz": Opcode.JNZ,
         "hlt": Opcode.HLT,
         "cmp": Opcode.CMP,
         "nop": Opcode.NOP
 
     }.get(str_opcode, Opcode.NOP)
+
+
+class Mux(str, Enum):
+    FROM_ACC: str = "from_acc"
+    FROM_DR: str = "from_dr"
+    FROM_ALU: str = "from_alu"
+    FROM_PC: str = "from_pc"
+    FROM_SP: str = "from_sp"
+    FROM_INPUT: str = "from_input"
+    FROM_PS: str = "from_ps"
+
+    def __str__(self):
+        return str(self.value)
+
+
+class ALUOpcode(str, Enum):
+    INC_A = "inc_a"
+    INC_B = "inc_b"
+    DEC_A = "dec_a"
+    DEC_B = "dec_b"
+    ADD = "add"
+    CMP = "cmp"
+    AND = "and"
+    NEXT_IN_A = "next_in_a"
+    NEXT_IN_B = "next_in_b"
+
+    def __str__(self) -> str:
+        return str(self.value)
 
 
 def write_code(filename, code):
