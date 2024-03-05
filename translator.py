@@ -66,14 +66,15 @@ def parse_literal(line, org, m_tokens) -> ParseResult:
             m_tokens[org] = [ord(line[line_iter])]
             line_iter += 1
             org += 1
+    elif line[line_iter].isnumeric() or line[line_iter] == "-":
+        for j in range(len(line)):
+            number += line[line_iter]
+            line_iter += 1
+        m_tokens[org] = [int(number)]
+        org += 1
     else:
-        if line[line_iter].isnumeric() or line[line_iter] == "-":
-
-            for j in range(len(line)):
-                number += line[line_iter]
-                line_iter += 1
-            m_tokens[org] = [int(number)]
-            org += 1
+        m_tokens[org] = [line]
+        org += 1
     return org, m_tokens
 
 
