@@ -62,7 +62,7 @@ def parse_literal(line, org, m_tokens) -> ParseResult:
             assert ValueError("Incorrect size of string")
         line_iter += 1
         for j in range(len(line) - 2):
-            print(ord(line[line_iter]))
+            # print(ord(line[line_iter]))
             m_tokens[org] = [ord(line[line_iter])]
             line_iter += 1
             org += 1
@@ -73,6 +73,7 @@ def parse_literal(line, org, m_tokens) -> ParseResult:
         m_tokens[org] = [int(number)]
         org += 1
     else:
+        print(line)
         m_tokens[org] = [line]
         org += 1
     return org, m_tokens
@@ -81,21 +82,32 @@ def parse_literal(line, org, m_tokens) -> ParseResult:
 def stage_1(lines, org) -> Stage1Result:
     l_tokens = {}
     m_tokens = {}
+    flag = False
     for line in lines:
         if line.startswith("org"):
+            flag = False
             continue
         if line.endswith(":"):
+            if flag:
+                org += 1
             l_tokens[org] = line[:-1]
+            flag = True
+            # if line.startswith("_"):
+            #     org += 1
         elif line.startswith(".word"):
             org, m_tokens = parse_literal(line, org, m_tokens)
+            flag = False
         else:
             row_command = line.split(" ")
             m_tokens[org] = row_command
             org += 1
+            flag = False
     return l_tokens, m_tokens
 
 
 def stage_2(l_tokens, m_tokens) -> dict:
+    print(l_tokens)
+    print(m_tokens)
     buf = {}
     for pos, token in m_tokens.items():
 
@@ -111,6 +123,7 @@ def stage_2(l_tokens, m_tokens) -> dict:
             new_label.append(part)
         new_label.append(i_type)
         buf[pos] = new_label
+        print(buf)
     return buf
 
 
@@ -124,8 +137,8 @@ def stage_3(r_code, start):
         }
     ]
     for index, token in r_code.items():
-        print(get_opcode(token[0]))
-        print(token)
+        # print(get_opcode(token[0]))
+        # print(token)
         if len(token) == 2:
             code.append(
                 {
@@ -153,7 +166,7 @@ def translate(lines):
     org: int = find_org(lines)
     lines = clean(lines)
     l_tokens, m_tokens = stage_1(lines, org)
-    print(l_tokens)
+    # print(l_tokens)
     start: int = find_start(l_tokens)
     r_code = stage_2(l_tokens, m_tokens)
     code = stage_3(r_code, start)

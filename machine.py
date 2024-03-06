@@ -29,7 +29,7 @@ class DataPath:
     output_buf_sym: list = None
     input_buf: list = None
 
-    def __init__(self, capacity:int, input_buf):
+    def __init__(self, capacity: int, input_buf):
         self.alu = ALU()
         self.mem_capacity = capacity
         self.input_buf = input_buf
@@ -75,9 +75,13 @@ class DataPath:
         if mux.value == Mux.FROM_ACC:
             self.acc = self.alu.result
         elif mux.value == Mux.FROM_INPUT:
-            symbol = ord(self.input_buf.pop(0)["symbol"])
-            self.acc = symbol
-            logging.debug(f"INPUT {repr(symbol)}")
+            if len(self.input_buf) == 0:
+                self.acc = 0
+                self.alu.flag_z = True
+            else:
+                symbol = ord(self.input_buf.pop(0))
+                self.acc = symbol
+                logging.debug(f"INPUT {repr(symbol)}")
         else:
             assert ValueError(f"Wrong mux  {mux.value}")
 
@@ -85,7 +89,6 @@ class DataPath:
         port_type = self.dr
         # symbol
         if port_type == 0:
-            print(self.acc)
             ch = chr(self.acc)
             logging.debug(f"symbols buffer: {''.join(self.output_buf_sym)} << {repr(ch)}")
             self.output_buf_sym.append(ch)
@@ -187,6 +190,9 @@ class ControlUnit:
             self.dataPath.alu_execution(ALUOpcode.DEC_A, mux_a=Mux.FROM_ACC)
             self.dataPath.latch_acc(Mux.FROM_ACC)
             self.inc_ticks()
+        elif opcode == Opcode.IN:
+            self.dataPath.latch_acc(Mux.FROM_INPUT)
+            self.inc_ticks()
         elif opcode == Opcode.PUSH:
             self.dataPath.alu_execution(ALUOpcode.DEC_A, mux_b=Mux.FROM_SP)
             self.dataPath.latch_sp()
@@ -248,9 +254,6 @@ class ControlUnit:
             self.dataPath.alu_execution(ALUOpcode.NEXT_IN_A, mux_a=Mux.FROM_ACC)
             self.dataPath.latch_mr()
             self.dataPath.latch_wr()
-            self.inc_ticks()
-        elif opcode == Opcode.IN:
-            self.dataPath.latch_acc(Mux.FROM_INPUT)
             self.inc_ticks()
         elif opcode == Opcode.OUT:
             self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
