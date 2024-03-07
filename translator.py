@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import sys
-from isa import Opcode, write_code, get_opcode
-from typing import TypedDict, List
+from typing import TypedDict
+
+from isa import Opcode, get_opcode, write_code
 
 
 class Stage1Result(TypedDict):
@@ -15,11 +17,11 @@ class ParseResult(TypedDict):
 
 
 class ReadFileResult(TypedDict):
-    code: List
+    code: list
     line_count: int
 
 
-def clean(lines) -> List:
+def clean(lines) -> list:
     buf: list[str] = []
     for line in lines:
         if line.find(";") != -1:
@@ -36,8 +38,9 @@ def find_org(lines) -> int:
     for line in lines:
         if line.find("org") == -1:
             continue
-        else:
-            return int(line[4:].strip())
+
+        return int(line[4:].strip())
+    return 0
 
 
 def find_start(labels) -> int:
@@ -90,8 +93,7 @@ def stage_1(lines, org) -> Stage1Result:
                 org += 1
             l_tokens[org] = line[:-1]
             flag = True
-            # if line.startswith("_"):
-            #     org += 1
+
         elif line.startswith(".word"):
             org, m_tokens = parse_literal(line, org, m_tokens)
             flag = False
@@ -145,8 +147,7 @@ def translate(lines):
     l_tokens, m_tokens = stage_1(lines, org)
     start: int = find_start(l_tokens)
     r_code = stage_2(l_tokens, m_tokens)
-    code = stage_3(r_code, start)
-    return code
+    return stage_3(r_code, start)
 
 
 def main(code_source_file, code_target):

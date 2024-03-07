@@ -1,33 +1,34 @@
 #!/usr/bin/python3
 from __future__ import annotations
+
 import logging
 import sys
 from typing import ClassVar
 
-from isa import *
+from isa import ALUOpcode, Mux, Opcode, non_operand_commands, operand_commands, read_code
 
 
-class ExitException(Exception):
+class ExitExceptionError(Exception):
     def __init__(self, opcode):
         self.message = f"In {opcode}"
         super().__init__(self.message)
 
 
 class DataPath:
-    acc: int = None
-    alu = None
-    addr: int = None
-    dr: int = None
-    mem = None
-    mem_capacity = None
-    ir = None
-    sp: int = None
-    pc: int = None
-    ps = {}
-    mr: int = None
-    output_buf_num: list = None
-    output_buf_sym: list = None
-    input_buf: list = None
+    acc: ClassVar[int] = None
+    alu: ClassVar = None
+    addr: ClassVar[int] = None
+    dr: ClassVar[int] = None
+    mem: ClassVar = None
+    mem_capacity: ClassVar = None
+    ir: ClassVar = None
+    sp: ClassVar[int] = None
+    pc: ClassVar[int] = None
+    ps: ClassVar = {}
+    mr: ClassVar[int] = None
+    output_buf_num: ClassVar[list] = None
+    output_buf_sym: ClassVar[list] = None
+    input_buf: ClassVar[list] = None
 
     def __init__(self, capacity: int, input_buf):
         self.alu = ALU()
@@ -81,17 +82,17 @@ class DataPath:
             else:
                 symbol = ord(self.input_buf.pop(0))
                 self.acc = symbol
-                logging.debug(f"INPUT {repr(symbol)}")
+                logging.debug(f"INPUT {symbol!r}")
         else:
-            assert ValueError(f"Wrong mux  {mux.value}")
+            assert ValueError(f"Wrong mux  {mux.value!s}")
 
     def latch_output(self):
         port_type = self.dr
         # symbol
         if port_type == 0:
             ch = chr(self.acc)
-            logging.debug(f"symbols buffer: {''.join(self.output_buf_sym)} << {repr(ch)}")
-            self.output_buf_sym.append(ch)
+            logging.debug(f"symbols buffer: {''.join(self.output_buf_sym)} << {ch!r}")
+            self.output_buf_sym.append(str(ch))
         elif port_type == 1:
             ch = self.acc
             logging.debug(f"numeric buffer: {[str(x) for x in self.output_buf_num]} << {ch}")
@@ -186,7 +187,7 @@ class ControlUnit:
 
     def non_operand_execute(self, opcode: Opcode):
         if opcode == Opcode.HLT:
-            raise ExitException(Opcode.HLT)
+            raise ExitExceptionError(Opcode.HLT)
         if opcode == Opcode.INC:
             self.data_path.alu_execution(ALUOpcode.INC_A, mux_a=Mux.FROM_ACC)
             self.data_path.latch_acc(Mux.FROM_ACC)
@@ -391,14 +392,19 @@ def simulation(code: list, input_token: list, mem_capacity: int, bound: int):
         while instr_counter < bound:
             control_unit.run_fetches()
             instr_counter += 1
-    except ExitException:
+    except ExitExceptionError:
         pass
 
     if instr_counter > bound:
         logging.warning("Limit exceeded!")
     logging.info("symbol_buffer: %s", repr("".join(data_path.output_buf_sym)))
     logging.info("numeric_buffer: [%s]", ", ".join(str(x) for x in data_path.output_buf_num))
-    return data_path.output_buf_sym, data_path.output_buf_num, instr_counter, control_unit.get_ticks()
+    return (
+        data_path.output_buf_sym,
+        data_path.output_buf_num,
+        instr_counter,
+        control_unit.get_ticks(),
+    )
 
 
 def main(source, file):
