@@ -1,6 +1,6 @@
 from __future__ import annotations
-import json
 
+import json
 from enum import Enum
 
 
@@ -110,6 +110,5 @@ def write_code(filename, code):
 
 
 def read_code(filename):
-    with open(filename, "r", encoding="utf-8") as file:
-        code = json.loads(file.read())
-    return code
+    with open(filename, encoding="utf-8") as file:
+        return json.loads(file.read())
