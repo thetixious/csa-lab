@@ -98,7 +98,12 @@ class DataPath:
             self.output_buf_num.append(ch)
 
     def latch_wr(self):
-        self.mem[self.addr] = {"index": self.addr, "opcode": Opcode.NOP.value, "value": self.mr, "is_indirect": False, }
+        self.mem[self.addr] = {
+            "index": self.addr,
+            "opcode": Opcode.NOP.value,
+            "value": self.mr,
+            "is_indirect": False,
+        }
 
     def alu_execution(self, op, mux_a: Mux = None, mux_b: Mux = None):
         route_a = None
@@ -318,7 +323,7 @@ class ALU:
         ALUOpcode.CMP,
         ALUOpcode.AND,
         ALUOpcode.NEXT_IN_A,
-        ALUOpcode.NEXT_IN_B
+        ALUOpcode.NEXT_IN_B,
     ]
     operation: ClassVar[ALUOpcode] = None
 

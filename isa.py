@@ -5,7 +5,6 @@ from enum import Enum
 
 
 class Opcode(str, Enum):
-
     AND: str = "AND"
     LD: str = "LD"
     ADD: str = "ADD"
@@ -44,7 +43,6 @@ operand_commands: str = [Opcode.ADD, Opcode.OUT, Opcode.LD, Opcode.CMP, Opcode.S
 
 def get_opcode(str_opcode) -> Opcode:
     return {
-
         "ld": Opcode.LD,
         "add": Opcode.ADD,
         "sub": Opcode.SUB,
@@ -70,8 +68,7 @@ def get_opcode(str_opcode) -> Opcode:
         "jnz": Opcode.JNZ,
         "hlt": Opcode.HLT,
         "cmp": Opcode.CMP,
-        "nop": Opcode.NOP
-
+        "nop": Opcode.NOP,
     }.get(str_opcode, Opcode.NOP)
 
 

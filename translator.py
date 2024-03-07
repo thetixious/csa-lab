@@ -23,7 +23,7 @@ def clean(lines) -> List:
     buf: list[str] = []
     for line in lines:
         if line.find(";") != -1:
-            line = line[:line.find(";")].strip()
+            line = line[: line.find(";")].strip()
             if line == "":
                 continue
             buf.append(line)
@@ -49,7 +49,7 @@ def find_start(labels) -> int:
 
 
 def parse_literal(line, org, m_tokens) -> ParseResult:
-    number = ''
+    number = ""
     line_iter = 0
     line = line.strip()[6:]
     if line.find("'") != -1:
@@ -106,7 +106,6 @@ def stage_1(lines, org) -> Stage1Result:
 def stage_2(l_tokens, m_tokens) -> dict:
     buf = {}
     for pos, token in m_tokens.items():
-
         new_label = []
         i_type = False
         for part in token:
@@ -123,14 +122,7 @@ def stage_2(l_tokens, m_tokens) -> dict:
 
 
 def stage_3(r_code, start):
-    code = [
-        {
-            "index": 0,
-            "opcode": Opcode.JMP,
-            "value": start,
-            "is_indirect": False
-        }
-    ]
+    code = [{"index": 0, "opcode": Opcode.JMP, "value": start, "is_indirect": False}]
     for index, token in r_code.items():
         if len(token) == 2:
             code.append(
@@ -138,19 +130,11 @@ def stage_3(r_code, start):
                     "index": index,
                     "opcode": get_opcode(token[0]),
                     "value": 0 if get_opcode(token[0]) not in [m.value for m in Opcode] else token[0],
-                    "is_indirect": token[1]
+                    "is_indirect": token[1],
                 }
             )
         elif len(token) == 3:
-            code.append(
-                {
-                    "index": index,
-                    "opcode": get_opcode(token[0]),
-                    "value": token[1],
-                    "is_indirect": token[2]
-
-                }
-            )
+            code.append({"index": index, "opcode": get_opcode(token[0]), "value": token[1], "is_indirect": token[2]})
 
     return code
 
