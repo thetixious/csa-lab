@@ -33,7 +33,7 @@ class DataPath:
         self.alu = ALU()
         self.mem_capacity = capacity
         self.input_buf = input_buf
-        self.mem = [{"opcode": Opcode.NOP.value}] * self.mem_capacity
+        self.mem = [{"opcode": Opcode.NOP.value, "value":0}] * self.mem_capacity
         self.addr = 0
         self.ir = {"opcode": Opcode.NOP.value}
         self.sp = 0
@@ -404,7 +404,8 @@ def main(source, file):
     symbols, nums, instr_counter, ticks_counter = simulation(code, input_tokens, mem_size, bound)
 
     print("".join(symbols))
-    print(nums)
+    if len(nums)!=0:
+        print(nums)
     print("count of instructions: ", instr_counter)
     print("count of ticks: ", ticks_counter)
 
