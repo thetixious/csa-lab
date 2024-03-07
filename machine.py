@@ -33,7 +33,7 @@ class DataPath:
         self.alu = ALU()
         self.mem_capacity = capacity
         self.input_buf = input_buf
-        self.mem = [{"opcode": Opcode.NOP.value, "value":0}] * self.mem_capacity
+        self.mem = [{"opcode": Opcode.NOP.value, "value": 0}] * self.mem_capacity
         self.addr = 0
         self.ir = {"opcode": Opcode.NOP.value}
         self.sp = 0
@@ -44,7 +44,7 @@ class DataPath:
         self.output_buf_sym = []
         self.output_buf_num = []
 
-    def put_program_into_memory(self, program: object) -> object:
+    def put_program_into_memory(self, program: list):
         for line in program:
             index = line["index"]
             self.mem[index] = line
@@ -132,15 +132,15 @@ class DataPath:
 
 
 class ControlUnit:
-    dataPath = None
+    data_path = None
     inst_count = None
     ticks = None
 
-    def __init__(self, dataPath: DataPath, program):
-        self.dataPath = dataPath
+    def __init__(self, data_path: DataPath, program):
+        self.data_path = data_path
         self.inst_count = 0
         self.ticks = 0
-        dataPath.put_program_into_memory(program)
+        data_path.put_program_into_memory(program)
 
     def inc_ticks(self):
         self.ticks += 1
@@ -149,28 +149,28 @@ class ControlUnit:
         return self.ticks
 
     def instruction_fetch(self):
-        self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_PC)
-        self.dataPath.latch_address()
+        self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_PC)
+        self.data_path.latch_address()
         self.inc_ticks()
-        self.dataPath.alu_execution(ALUOpcode.INC_B, mux_b=Mux.FROM_PC)
-        self.dataPath.latch_pc()
-        self.dataPath.latch_instr()
-        self.dataPath.latch_dr()
+        self.data_path.alu_execution(ALUOpcode.INC_B, mux_b=Mux.FROM_PC)
+        self.data_path.latch_pc()
+        self.data_path.latch_instr()
+        self.data_path.latch_dr()
         self.inc_ticks()
 
     def abstract_execution(self):
-        ir = self.dataPath.ir
-        ps = self.dataPath.ps
+        ir = self.data_path.ir
+        ps = self.data_path.ps
         opcode = ir["opcode"]
         is_indirect = ir["is_indirect"]
         if opcode == Opcode.NOP:
             self.inc_ticks()
             return
         if is_indirect:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_address()
             self.inc_ticks()
-            self.dataPath.latch_dr()
+            self.data_path.latch_dr()
             self.inc_ticks()
         if opcode in operand_commands:
             self.operand_execute(opcode)
@@ -183,123 +183,123 @@ class ControlUnit:
         if opcode == Opcode.HLT:
             raise ExitException(Opcode.HLT)
         if opcode == Opcode.INC:
-            self.dataPath.alu_execution(ALUOpcode.INC_A, mux_a=Mux.FROM_ACC)
-            self.dataPath.latch_acc(Mux.FROM_ACC)
+            self.data_path.alu_execution(ALUOpcode.INC_A, mux_a=Mux.FROM_ACC)
+            self.data_path.latch_acc(Mux.FROM_ACC)
             self.inc_ticks()
         elif opcode == Opcode.DEC:
-            self.dataPath.alu_execution(ALUOpcode.DEC_A, mux_a=Mux.FROM_ACC)
-            self.dataPath.latch_acc(Mux.FROM_ACC)
+            self.data_path.alu_execution(ALUOpcode.DEC_A, mux_a=Mux.FROM_ACC)
+            self.data_path.latch_acc(Mux.FROM_ACC)
             self.inc_ticks()
         elif opcode == Opcode.IN:
-            self.dataPath.latch_acc(Mux.FROM_INPUT)
+            self.data_path.latch_acc(Mux.FROM_INPUT)
             self.inc_ticks()
         elif opcode == Opcode.PUSH:
-            self.dataPath.alu_execution(ALUOpcode.DEC_A, mux_b=Mux.FROM_SP)
-            self.dataPath.latch_sp()
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.DEC_A, mux_b=Mux.FROM_SP)
+            self.data_path.latch_sp()
+            self.data_path.latch_address()
             self.inc_ticks()
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_A, mux_a=Mux.FROM_ACC)
-            self.dataPath.latch_mr()
-            self.dataPath.latch_wr()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_A, mux_a=Mux.FROM_ACC)
+            self.data_path.latch_mr()
+            self.data_path.latch_wr()
             self.inc_ticks()
         elif opcode == Opcode.POP:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_SP)
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_SP)
+            self.data_path.latch_address()
             self.inc_ticks()
 
-            self.dataPath.alu_execution(ALUOpcode.DEC_B, mux_b=Mux.FROM_SP)
-            self.dataPath.latch_dr()
-            self.dataPath.latch_sp()
+            self.data_path.alu_execution(ALUOpcode.DEC_B, mux_b=Mux.FROM_SP)
+            self.data_path.latch_dr()
+            self.data_path.latch_sp()
             self.inc_ticks()
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_acc(Mux.FROM_ACC)
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_acc(Mux.FROM_ACC)
             self.inc_ticks()
 
     def operand_execute(self, opcode: Opcode):
         if opcode == Opcode.ADD:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_address()
-            self.dataPath.latch_dr()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_address()
+            self.data_path.latch_dr()
             self.inc_ticks()
-            self.dataPath.alu_execution(ALUOpcode.ADD, mux_a=Mux.FROM_ACC, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_acc(Mux.FROM_ACC)
+            self.data_path.alu_execution(ALUOpcode.ADD, mux_a=Mux.FROM_ACC, mux_b=Mux.FROM_DR)
+            self.data_path.latch_acc(Mux.FROM_ACC)
             self.inc_ticks()
         elif opcode == Opcode.CMP:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_address()
             self.inc_ticks()
-            self.dataPath.latch_dr()
-            self.dataPath.alu_execution(ALUOpcode.CMP, mux_a=Mux.FROM_ACC, mux_b=Mux.FROM_DR)
+            self.data_path.latch_dr()
+            self.data_path.alu_execution(ALUOpcode.CMP, mux_a=Mux.FROM_ACC, mux_b=Mux.FROM_DR)
             self.inc_ticks()
         elif opcode == Opcode.AND:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_address()
             self.inc_ticks()
-            self.dataPath.latch_dr()
-            self.dataPath.alu_execution(ALUOpcode.AND, mux_a=Mux.FROM_ACC, mux_b=Mux.FROM_DR)
+            self.data_path.latch_dr()
+            self.data_path.alu_execution(ALUOpcode.AND, mux_a=Mux.FROM_ACC, mux_b=Mux.FROM_DR)
             self.inc_ticks()
         elif opcode == Opcode.LD:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_address()
             self.inc_ticks()
-            self.dataPath.latch_dr()
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_acc(Mux.FROM_ACC)
+            self.data_path.latch_dr()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_acc(Mux.FROM_ACC)
             self.inc_ticks()
         elif opcode == Opcode.ST:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_address()
             self.inc_ticks()
-            self.dataPath.latch_dr()
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_A, mux_a=Mux.FROM_ACC)
-            self.dataPath.latch_mr()
-            self.dataPath.latch_wr()
+            self.data_path.latch_dr()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_A, mux_a=Mux.FROM_ACC)
+            self.data_path.latch_mr()
+            self.data_path.latch_wr()
             self.inc_ticks()
         elif opcode == Opcode.OUT:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_address()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_address()
             self.inc_ticks()
-            self.dataPath.latch_dr()
-            self.dataPath.latch_output()
+            self.data_path.latch_dr()
+            self.data_path.latch_output()
 
     def branch_execute(self, opcode: Opcode, ps: dict):
         if opcode == Opcode.JMP:
-            self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-            self.dataPath.latch_pc()
+            self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+            self.data_path.latch_pc()
             self.inc_ticks()
         elif opcode == Opcode.JZ:
             if ps["Z"]:
-                self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-                self.dataPath.latch_pc()
+                self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+                self.data_path.latch_pc()
                 self.inc_ticks()
         elif opcode == Opcode.JNZ:
             if not ps["Z"]:
-                self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-                self.dataPath.latch_pc()
+                self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+                self.data_path.latch_pc()
                 self.inc_ticks()
         elif opcode == Opcode.JG:
             if not ps["N"]:
-                self.dataPath.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
-                self.dataPath.latch_pc()
+                self.data_path.alu_execution(ALUOpcode.NEXT_IN_B, mux_b=Mux.FROM_DR)
+                self.data_path.latch_pc()
                 self.inc_ticks()
 
     def run_fetches(self):
         self.instruction_fetch()
         self.abstract_execution()
-        self.dataPath.latch_flags()
+        self.data_path.latch_flags()
         logging.debug(self.self_shot())
 
     def self_shot(self) -> str:
         return "TICK: {:4} | AC {:7} | IR: {:4} | ADDR: {:4} | PC: {:3} | DR: {:7} | SP : {:4} | mem[ADDR] {:7} | ToMEM : {:3} |".format(
             self.get_ticks(),
-            self.dataPath.acc,
-            self.dataPath.ir["opcode"],
-            self.dataPath.addr,
-            self.dataPath.pc,
-            self.dataPath.dr,
-            self.dataPath.sp,
-            self.dataPath.mem[self.dataPath.addr]["value"],
-            self.dataPath.mr,
+            self.data_path.acc,
+            self.data_path.ir["opcode"],
+            self.data_path.addr,
+            self.data_path.pc,
+            self.data_path.dr,
+            self.data_path.sp,
+            self.data_path.mem[self.data_path.addr]["value"],
+            self.data_path.mr,
         )
 
 
@@ -379,8 +379,8 @@ def read_data(file) -> list:
 
 
 def simulation(code: list, input_token: list, mem_capacity: int, bound: int):
-    dataPath = DataPath(mem_capacity, input_token)
-    control_unit = ControlUnit(dataPath, code)
+    data_path = DataPath(mem_capacity, input_token)
+    control_unit = ControlUnit(data_path, code)
     instr_counter = 0
     try:
         while instr_counter < bound:
@@ -391,9 +391,9 @@ def simulation(code: list, input_token: list, mem_capacity: int, bound: int):
 
     if instr_counter > bound:
         logging.warning("Limit exceeded!")
-    logging.info("symbol_buffer: %s", repr("".join(dataPath.output_buf_sym)))
-    logging.info("numeric_buffer: [%s]", ", ".join(str(x) for x in dataPath.output_buf_num))
-    return dataPath.output_buf_sym, dataPath.output_buf_num, instr_counter, control_unit.get_ticks()
+    logging.info("symbol_buffer: %s", repr("".join(data_path.output_buf_sym)))
+    logging.info("numeric_buffer: [%s]", ", ".join(str(x) for x in data_path.output_buf_num))
+    return data_path.output_buf_sym, data_path.output_buf_num, instr_counter, control_unit.get_ticks()
 
 
 def main(source, file):
@@ -404,7 +404,7 @@ def main(source, file):
     symbols, nums, instr_counter, ticks_counter = simulation(code, input_tokens, mem_size, bound)
 
     print("".join(symbols))
-    if len(nums)!=0:
+    if len(nums) != 0:
         print(nums)
     print("count of instructions: ", instr_counter)
     print("count of ticks: ", ticks_counter)
