@@ -152,13 +152,16 @@ def translate(lines):
 
 def main(code_source_file, code_target):
     lines: list[str] = []
+    loc: int = 0
     with open(code_source_file, encoding="utf-8") as file:
         for line in file:
             if not line.strip():
                 continue
             lines.append(line.strip())
+            loc += 1
     code = translate(lines)
     write_code(code_target, code)
+    print("source LoC:", loc, "code instr:", len(code))
 
 
 if __name__ == "__main__":

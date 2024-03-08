@@ -104,7 +104,6 @@ def write_code(filename, code):
     with open(filename, "w", encoding="utf-8") as file:
         buf = []
         for instr in code:
-            print(instr)
             buf.append(json.dumps(instr))
         file.write("[" + ",\n".join(buf) + "]")
 

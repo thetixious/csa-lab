@@ -1,0 +1,199 @@
+in_source: |-
+  org 10
+    message:
+        .word 13, 'Hello, World!'
+    pointer:
+        .word message
+    cycles:
+        .word 0
+    out_port:
+        .word 0
+
+    _start:
+        ld message
+        st cycles
+        loop:
+            ld pointer
+            inc
+            st pointer
+            ld (pointer)
+            out out_port
+            ld cycles
+            dec
+            st cycles
+            jnz loop
+        hlt
+in_stdin: |
+out_code: |-
+  [{"index": 0, "opcode": "JMP", "value": 27, "is_indirect": false},
+  {"index": 10, "opcode": "NOP", "value": 13, "is_indirect": false},
+  {"index": 11, "opcode": "NOP", "value": 72, "is_indirect": false},
+  {"index": 12, "opcode": "NOP", "value": 101, "is_indirect": false},
+  {"index": 13, "opcode": "NOP", "value": 108, "is_indirect": false},
+  {"index": 14, "opcode": "NOP", "value": 108, "is_indirect": false},
+  {"index": 15, "opcode": "NOP", "value": 111, "is_indirect": false},
+  {"index": 16, "opcode": "NOP", "value": 44, "is_indirect": false},
+  {"index": 17, "opcode": "NOP", "value": 32, "is_indirect": false},
+  {"index": 18, "opcode": "NOP", "value": 87, "is_indirect": false},
+  {"index": 19, "opcode": "NOP", "value": 111, "is_indirect": false},
+  {"index": 20, "opcode": "NOP", "value": 114, "is_indirect": false},
+  {"index": 21, "opcode": "NOP", "value": 108, "is_indirect": false},
+  {"index": 22, "opcode": "NOP", "value": 100, "is_indirect": false},
+  {"index": 23, "opcode": "NOP", "value": 33, "is_indirect": false},
+  {"index": 24, "opcode": "NOP", "value": 10, "is_indirect": false},
+  {"index": 25, "opcode": "NOP", "value": 0, "is_indirect": false},
+  {"index": 26, "opcode": "NOP", "value": 0, "is_indirect": false},
+  {"index": 27, "opcode": "LD", "value": 10, "is_indirect": false},
+  {"index": 28, "opcode": "ST", "value": 25, "is_indirect": false},
+  {"index": 29, "opcode": "LD", "value": 24, "is_indirect": false},
+  {"index": 30, "opcode": "INC", "value": "inc", "is_indirect": false},
+  {"index": 31, "opcode": "ST", "value": 24, "is_indirect": false},
+  {"index": 32, "opcode": "LD", "value": 24, "is_indirect": true},
+  {"index": 33, "opcode": "OUT", "value": 26, "is_indirect": false},
+  {"index": 34, "opcode": "LD", "value": 25, "is_indirect": false},
+  {"index": 35, "opcode": "DEC", "value": "dec", "is_indirect": false},
+  {"index": 36, "opcode": "ST", "value": 25, "is_indirect": false},
+  {"index": 37, "opcode": "JNZ", "value": 29, "is_indirect": false},
+  {"index": 38, "opcode": "HLT", "value": "hlt", "is_indirect": false}]
+out_stdout: |
+  source LoC: 23 code instr: 30
+  ============================================================
+  Hello, World!
+  count of instructions:  120
+  count of ticks:  454
+out_log: |
+  DEBUG   machine:run_fetches   TICK:    3 | AC       0 | IR: JMP  | ADDR:    0 | PC:  27 | DR:      27 | SP :    0 | mem[ADDR]      27 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:    7 | AC      13 | IR: LD   | ADDR:   10 | PC:  28 | DR:      13 | SP :    0 | mem[ADDR]      13 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   11 | AC      13 | IR: ST   | ADDR:   25 | PC:  29 | DR:       0 | SP :    0 | mem[ADDR]      13 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:   15 | AC      10 | IR: LD   | ADDR:   24 | PC:  30 | DR:      10 | SP :    0 | mem[ADDR]      10 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:   18 | AC      11 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:   22 | AC      11 | IR: ST   | ADDR:   24 | PC:  32 | DR:      10 | SP :    0 | mem[ADDR]      11 | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   28 | AC      72 | IR: LD   | ADDR:   11 | PC:  33 | DR:      72 | SP :    0 | mem[ADDR]      72 | ToMEM :  11 |
+  DEBUG   machine:latch_output  symbols buffer:  << 'H'
+  DEBUG   machine:run_fetches   TICK:   31 | AC      72 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   35 | AC      13 | IR: LD   | ADDR:   25 | PC:  35 | DR:      13 | SP :    0 | mem[ADDR]      13 | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   38 | AC      12 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   42 | AC      12 | IR: ST   | ADDR:   25 | PC:  37 | DR:      13 | SP :    0 | mem[ADDR]      12 | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   45 | AC      12 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   49 | AC      11 | IR: LD   | ADDR:   24 | PC:  30 | DR:      11 | SP :    0 | mem[ADDR]      11 | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   52 | AC      12 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   56 | AC      12 | IR: ST   | ADDR:   24 | PC:  32 | DR:      11 | SP :    0 | mem[ADDR]      12 | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   62 | AC     101 | IR: LD   | ADDR:   12 | PC:  33 | DR:     101 | SP :    0 | mem[ADDR]     101 | ToMEM :  12 |
+  DEBUG   machine:latch_output  symbols buffer: H << 'e'
+  DEBUG   machine:run_fetches   TICK:   65 | AC     101 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   69 | AC      12 | IR: LD   | ADDR:   25 | PC:  35 | DR:      12 | SP :    0 | mem[ADDR]      12 | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   72 | AC      11 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  12 |
+  DEBUG   machine:run_fetches   TICK:   76 | AC      11 | IR: ST   | ADDR:   25 | PC:  37 | DR:      12 | SP :    0 | mem[ADDR]      11 | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   79 | AC      11 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   83 | AC      12 | IR: LD   | ADDR:   24 | PC:  30 | DR:      12 | SP :    0 | mem[ADDR]      12 | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   86 | AC      13 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  11 |
+  DEBUG   machine:run_fetches   TICK:   90 | AC      13 | IR: ST   | ADDR:   24 | PC:  32 | DR:      12 | SP :    0 | mem[ADDR]      13 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:   96 | AC     108 | IR: LD   | ADDR:   13 | PC:  33 | DR:     108 | SP :    0 | mem[ADDR]     108 | ToMEM :  13 |
+  DEBUG   machine:latch_output  symbols buffer: He << 'l'
+  DEBUG   machine:run_fetches   TICK:   99 | AC     108 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  103 | AC      11 | IR: LD   | ADDR:   25 | PC:  35 | DR:      11 | SP :    0 | mem[ADDR]      11 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  106 | AC      10 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  110 | AC      10 | IR: ST   | ADDR:   25 | PC:  37 | DR:      11 | SP :    0 | mem[ADDR]      10 | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  113 | AC      10 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  117 | AC      13 | IR: LD   | ADDR:   24 | PC:  30 | DR:      13 | SP :    0 | mem[ADDR]      13 | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  120 | AC      14 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  124 | AC      14 | IR: ST   | ADDR:   24 | PC:  32 | DR:      13 | SP :    0 | mem[ADDR]      14 | ToMEM :  14 |
+  DEBUG   machine:run_fetches   TICK:  130 | AC     108 | IR: LD   | ADDR:   14 | PC:  33 | DR:     108 | SP :    0 | mem[ADDR]     108 | ToMEM :  14 |
+  DEBUG   machine:latch_output  symbols buffer: Hel << 'l'
+  DEBUG   machine:run_fetches   TICK:  133 | AC     108 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  14 |
+  DEBUG   machine:run_fetches   TICK:  137 | AC      10 | IR: LD   | ADDR:   25 | PC:  35 | DR:      10 | SP :    0 | mem[ADDR]      10 | ToMEM :  14 |
+  DEBUG   machine:run_fetches   TICK:  140 | AC       9 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  14 |
+  DEBUG   machine:run_fetches   TICK:  144 | AC       9 | IR: ST   | ADDR:   25 | PC:  37 | DR:      10 | SP :    0 | mem[ADDR]       9 | ToMEM :   9 |
+  DEBUG   machine:run_fetches   TICK:  147 | AC       9 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   9 |
+  DEBUG   machine:run_fetches   TICK:  151 | AC      14 | IR: LD   | ADDR:   24 | PC:  30 | DR:      14 | SP :    0 | mem[ADDR]      14 | ToMEM :   9 |
+  DEBUG   machine:run_fetches   TICK:  154 | AC      15 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   9 |
+  DEBUG   machine:run_fetches   TICK:  158 | AC      15 | IR: ST   | ADDR:   24 | PC:  32 | DR:      14 | SP :    0 | mem[ADDR]      15 | ToMEM :  15 |
+  DEBUG   machine:run_fetches   TICK:  164 | AC     111 | IR: LD   | ADDR:   15 | PC:  33 | DR:     111 | SP :    0 | mem[ADDR]     111 | ToMEM :  15 |
+  DEBUG   machine:latch_output  symbols buffer: Hell << 'o'
+  DEBUG   machine:run_fetches   TICK:  167 | AC     111 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  15 |
+  DEBUG   machine:run_fetches   TICK:  171 | AC       9 | IR: LD   | ADDR:   25 | PC:  35 | DR:       9 | SP :    0 | mem[ADDR]       9 | ToMEM :  15 |
+  DEBUG   machine:run_fetches   TICK:  174 | AC       8 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  15 |
+  DEBUG   machine:run_fetches   TICK:  178 | AC       8 | IR: ST   | ADDR:   25 | PC:  37 | DR:       9 | SP :    0 | mem[ADDR]       8 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  181 | AC       8 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  185 | AC      15 | IR: LD   | ADDR:   24 | PC:  30 | DR:      15 | SP :    0 | mem[ADDR]      15 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  188 | AC      16 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  192 | AC      16 | IR: ST   | ADDR:   24 | PC:  32 | DR:      15 | SP :    0 | mem[ADDR]      16 | ToMEM :  16 |
+  DEBUG   machine:run_fetches   TICK:  198 | AC      44 | IR: LD   | ADDR:   16 | PC:  33 | DR:      44 | SP :    0 | mem[ADDR]      44 | ToMEM :  16 |
+  DEBUG   machine:latch_output  symbols buffer: Hello << ','
+  DEBUG   machine:run_fetches   TICK:  201 | AC      44 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  16 |
+  DEBUG   machine:run_fetches   TICK:  205 | AC       8 | IR: LD   | ADDR:   25 | PC:  35 | DR:       8 | SP :    0 | mem[ADDR]       8 | ToMEM :  16 |
+  DEBUG   machine:run_fetches   TICK:  208 | AC       7 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  16 |
+  DEBUG   machine:run_fetches   TICK:  212 | AC       7 | IR: ST   | ADDR:   25 | PC:  37 | DR:       8 | SP :    0 | mem[ADDR]       7 | ToMEM :   7 |
+  DEBUG   machine:run_fetches   TICK:  215 | AC       7 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   7 |
+  DEBUG   machine:run_fetches   TICK:  219 | AC      16 | IR: LD   | ADDR:   24 | PC:  30 | DR:      16 | SP :    0 | mem[ADDR]      16 | ToMEM :   7 |
+  DEBUG   machine:run_fetches   TICK:  222 | AC      17 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   7 |
+  DEBUG   machine:run_fetches   TICK:  226 | AC      17 | IR: ST   | ADDR:   24 | PC:  32 | DR:      16 | SP :    0 | mem[ADDR]      17 | ToMEM :  17 |
+  DEBUG   machine:run_fetches   TICK:  232 | AC      32 | IR: LD   | ADDR:   17 | PC:  33 | DR:      32 | SP :    0 | mem[ADDR]      32 | ToMEM :  17 |
+  DEBUG   machine:latch_output  symbols buffer: Hello, << ' '
+  DEBUG   machine:run_fetches   TICK:  235 | AC      32 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  17 |
+  DEBUG   machine:run_fetches   TICK:  239 | AC       7 | IR: LD   | ADDR:   25 | PC:  35 | DR:       7 | SP :    0 | mem[ADDR]       7 | ToMEM :  17 |
+  DEBUG   machine:run_fetches   TICK:  242 | AC       6 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  17 |
+  DEBUG   machine:run_fetches   TICK:  246 | AC       6 | IR: ST   | ADDR:   25 | PC:  37 | DR:       7 | SP :    0 | mem[ADDR]       6 | ToMEM :   6 |
+  DEBUG   machine:run_fetches   TICK:  249 | AC       6 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   6 |
+  DEBUG   machine:run_fetches   TICK:  253 | AC      17 | IR: LD   | ADDR:   24 | PC:  30 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :   6 |
+  DEBUG   machine:run_fetches   TICK:  256 | AC      18 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   6 |
+  DEBUG   machine:run_fetches   TICK:  260 | AC      18 | IR: ST   | ADDR:   24 | PC:  32 | DR:      17 | SP :    0 | mem[ADDR]      18 | ToMEM :  18 |
+  DEBUG   machine:run_fetches   TICK:  266 | AC      87 | IR: LD   | ADDR:   18 | PC:  33 | DR:      87 | SP :    0 | mem[ADDR]      87 | ToMEM :  18 |
+  DEBUG   machine:latch_output  symbols buffer: Hello,  << 'W'
+  DEBUG   machine:run_fetches   TICK:  269 | AC      87 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  18 |
+  DEBUG   machine:run_fetches   TICK:  273 | AC       6 | IR: LD   | ADDR:   25 | PC:  35 | DR:       6 | SP :    0 | mem[ADDR]       6 | ToMEM :  18 |
+  DEBUG   machine:run_fetches   TICK:  276 | AC       5 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  18 |
+  DEBUG   machine:run_fetches   TICK:  280 | AC       5 | IR: ST   | ADDR:   25 | PC:  37 | DR:       6 | SP :    0 | mem[ADDR]       5 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  283 | AC       5 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  287 | AC      18 | IR: LD   | ADDR:   24 | PC:  30 | DR:      18 | SP :    0 | mem[ADDR]      18 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  290 | AC      19 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  294 | AC      19 | IR: ST   | ADDR:   24 | PC:  32 | DR:      18 | SP :    0 | mem[ADDR]      19 | ToMEM :  19 |
+  DEBUG   machine:run_fetches   TICK:  300 | AC     111 | IR: LD   | ADDR:   19 | PC:  33 | DR:     111 | SP :    0 | mem[ADDR]     111 | ToMEM :  19 |
+  DEBUG   machine:latch_output  symbols buffer: Hello, W << 'o'
+  DEBUG   machine:run_fetches   TICK:  303 | AC     111 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  19 |
+  DEBUG   machine:run_fetches   TICK:  307 | AC       5 | IR: LD   | ADDR:   25 | PC:  35 | DR:       5 | SP :    0 | mem[ADDR]       5 | ToMEM :  19 |
+  DEBUG   machine:run_fetches   TICK:  310 | AC       4 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  19 |
+  DEBUG   machine:run_fetches   TICK:  314 | AC       4 | IR: ST   | ADDR:   25 | PC:  37 | DR:       5 | SP :    0 | mem[ADDR]       4 | ToMEM :   4 |
+  DEBUG   machine:run_fetches   TICK:  317 | AC       4 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   4 |
+  DEBUG   machine:run_fetches   TICK:  321 | AC      19 | IR: LD   | ADDR:   24 | PC:  30 | DR:      19 | SP :    0 | mem[ADDR]      19 | ToMEM :   4 |
+  DEBUG   machine:run_fetches   TICK:  324 | AC      20 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   4 |
+  DEBUG   machine:run_fetches   TICK:  328 | AC      20 | IR: ST   | ADDR:   24 | PC:  32 | DR:      19 | SP :    0 | mem[ADDR]      20 | ToMEM :  20 |
+  DEBUG   machine:run_fetches   TICK:  334 | AC     114 | IR: LD   | ADDR:   20 | PC:  33 | DR:     114 | SP :    0 | mem[ADDR]     114 | ToMEM :  20 |
+  DEBUG   machine:latch_output  symbols buffer: Hello, Wo << 'r'
+  DEBUG   machine:run_fetches   TICK:  337 | AC     114 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  20 |
+  DEBUG   machine:run_fetches   TICK:  341 | AC       4 | IR: LD   | ADDR:   25 | PC:  35 | DR:       4 | SP :    0 | mem[ADDR]       4 | ToMEM :  20 |
+  DEBUG   machine:run_fetches   TICK:  344 | AC       3 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  20 |
+  DEBUG   machine:run_fetches   TICK:  348 | AC       3 | IR: ST   | ADDR:   25 | PC:  37 | DR:       4 | SP :    0 | mem[ADDR]       3 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  351 | AC       3 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  355 | AC      20 | IR: LD   | ADDR:   24 | PC:  30 | DR:      20 | SP :    0 | mem[ADDR]      20 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  358 | AC      21 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  362 | AC      21 | IR: ST   | ADDR:   24 | PC:  32 | DR:      20 | SP :    0 | mem[ADDR]      21 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  368 | AC     108 | IR: LD   | ADDR:   21 | PC:  33 | DR:     108 | SP :    0 | mem[ADDR]     108 | ToMEM :  21 |
+  DEBUG   machine:latch_output  symbols buffer: Hello, Wor << 'l'
+  DEBUG   machine:run_fetches   TICK:  371 | AC     108 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  375 | AC       3 | IR: LD   | ADDR:   25 | PC:  35 | DR:       3 | SP :    0 | mem[ADDR]       3 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  378 | AC       2 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  382 | AC       2 | IR: ST   | ADDR:   25 | PC:  37 | DR:       3 | SP :    0 | mem[ADDR]       2 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:  385 | AC       2 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:  389 | AC      21 | IR: LD   | ADDR:   24 | PC:  30 | DR:      21 | SP :    0 | mem[ADDR]      21 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:  392 | AC      22 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:  396 | AC      22 | IR: ST   | ADDR:   24 | PC:  32 | DR:      21 | SP :    0 | mem[ADDR]      22 | ToMEM :  22 |
+  DEBUG   machine:run_fetches   TICK:  402 | AC     100 | IR: LD   | ADDR:   22 | PC:  33 | DR:     100 | SP :    0 | mem[ADDR]     100 | ToMEM :  22 |
+  DEBUG   machine:latch_output  symbols buffer: Hello, Worl << 'd'
+  DEBUG   machine:run_fetches   TICK:  405 | AC     100 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  22 |
+  DEBUG   machine:run_fetches   TICK:  409 | AC       2 | IR: LD   | ADDR:   25 | PC:  35 | DR:       2 | SP :    0 | mem[ADDR]       2 | ToMEM :  22 |
+  DEBUG   machine:run_fetches   TICK:  412 | AC       1 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  22 |
+  DEBUG   machine:run_fetches   TICK:  416 | AC       1 | IR: ST   | ADDR:   25 | PC:  37 | DR:       2 | SP :    0 | mem[ADDR]       1 | ToMEM :   1 |
+  DEBUG   machine:run_fetches   TICK:  419 | AC       1 | IR: JNZ  | ADDR:   37 | PC:  29 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   1 |
+  DEBUG   machine:run_fetches   TICK:  423 | AC      22 | IR: LD   | ADDR:   24 | PC:  30 | DR:      22 | SP :    0 | mem[ADDR]      22 | ToMEM :   1 |
+  DEBUG   machine:run_fetches   TICK:  426 | AC      23 | IR: INC  | ADDR:   30 | PC:  31 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   1 |
+  DEBUG   machine:run_fetches   TICK:  430 | AC      23 | IR: ST   | ADDR:   24 | PC:  32 | DR:      22 | SP :    0 | mem[ADDR]      23 | ToMEM :  23 |
+  DEBUG   machine:run_fetches   TICK:  436 | AC      33 | IR: LD   | ADDR:   23 | PC:  33 | DR:      33 | SP :    0 | mem[ADDR]      33 | ToMEM :  23 |
+  DEBUG   machine:latch_output  symbols buffer: Hello, World << '!'
+  DEBUG   machine:run_fetches   TICK:  439 | AC      33 | IR: OUT  | ADDR:   26 | PC:  34 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :  23 |
+  DEBUG   machine:run_fetches   TICK:  443 | AC       1 | IR: LD   | ADDR:   25 | PC:  35 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :  23 |
+  DEBUG   machine:run_fetches   TICK:  446 | AC       0 | IR: DEC  | ADDR:   35 | PC:  36 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  23 |
+  DEBUG   machine:run_fetches   TICK:  450 | AC       0 | IR: ST   | ADDR:   25 | PC:  37 | DR:       1 | SP :    0 | mem[ADDR]       0 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:  452 | AC       0 | IR: JNZ  | ADDR:   37 | PC:  38 | DR:      29 | SP :    0 | mem[ADDR]      29 | ToMEM :   0 |
+  INFO    machine:simulation    symbol_buffer: 'Hello, World!'
+  INFO    machine:simulation    numeric_buffer: []

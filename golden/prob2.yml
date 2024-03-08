@@ -1,0 +1,556 @@
+in_source: |
+  org 10
+    limit:
+        .word 4000000
+    odd:
+        .word 1
+    prev:
+        .word 1
+    cur:
+        .word 2
+    tmp:
+        .word 0
+    result:
+        .word 0
+    out_port:
+        .word 1
+
+    _start:
+        ld cur
+        cmp limit
+        jg end
+        and odd
+        jnz finally
+        if_even:
+            ld result
+            add cur
+            st result
+        finally:
+            inc
+            dec
+            ld cur
+            st tmp
+            add prev
+            st cur
+            ld tmp
+            st prev
+        jmp _start
+        end:
+            ld result
+            out out_port
+        hlt
+in_stdin: |
+out_code: |-
+  [{"index": 0, "opcode": "JMP", "value": 17, "is_indirect": false},
+  {"index": 10, "opcode": "NOP", "value": 4000000, "is_indirect": false},
+  {"index": 11, "opcode": "NOP", "value": 1, "is_indirect": false},
+  {"index": 12, "opcode": "NOP", "value": 1, "is_indirect": false},
+  {"index": 13, "opcode": "NOP", "value": 2, "is_indirect": false},
+  {"index": 14, "opcode": "NOP", "value": 0, "is_indirect": false},
+  {"index": 15, "opcode": "NOP", "value": 0, "is_indirect": false},
+  {"index": 16, "opcode": "NOP", "value": 1, "is_indirect": false},
+  {"index": 17, "opcode": "LD", "value": 13, "is_indirect": false},
+  {"index": 18, "opcode": "CMP", "value": 10, "is_indirect": false},
+  {"index": 19, "opcode": "JG", "value": 34, "is_indirect": false},
+  {"index": 20, "opcode": "AND", "value": 11, "is_indirect": false},
+  {"index": 21, "opcode": "JNZ", "value": 25, "is_indirect": false},
+  {"index": 22, "opcode": "LD", "value": 15, "is_indirect": false},
+  {"index": 23, "opcode": "ADD", "value": 13, "is_indirect": false},
+  {"index": 24, "opcode": "ST", "value": 15, "is_indirect": false},
+  {"index": 25, "opcode": "INC", "value": "inc", "is_indirect": false},
+  {"index": 26, "opcode": "DEC", "value": "dec", "is_indirect": false},
+  {"index": 27, "opcode": "LD", "value": 13, "is_indirect": false},
+  {"index": 28, "opcode": "ST", "value": 14, "is_indirect": false},
+  {"index": 29, "opcode": "ADD", "value": 12, "is_indirect": false},
+  {"index": 30, "opcode": "ST", "value": 13, "is_indirect": false},
+  {"index": 31, "opcode": "LD", "value": 14, "is_indirect": false},
+  {"index": 32, "opcode": "ST", "value": 12, "is_indirect": false},
+  {"index": 33, "opcode": "JMP", "value": 17, "is_indirect": false},
+  {"index": 34, "opcode": "LD", "value": 15, "is_indirect": false},
+  {"index": 35, "opcode": "OUT", "value": 16, "is_indirect": false},
+  {"index": 36, "opcode": "HLT", "value": "hlt", "is_indirect": false}]
+out_stdout: |
+  source LoC: 39 code instr: 28
+  ============================================================
+
+  [4613732]
+  count of instructions:  473
+  count of ticks:  1694
+
+out_log: |
+  DEBUG   machine:run_fetches   TICK:    3 | AC       0 | IR: JMP  | ADDR:    0 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:    7 | AC       2 | IR: LD   | ADDR:   13 | PC:  18 | DR:       2 | SP :    0 | mem[ADDR]       2 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   11 | AC       2 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   13 | AC       2 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   17 | AC       2 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   19 | AC       2 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   23 | AC       0 | IR: LD   | ADDR:   15 | PC:  23 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   27 | AC       2 | IR: ADD  | ADDR:   13 | PC:  24 | DR:       2 | SP :    0 | mem[ADDR]       2 | ToMEM :   0 |
+  DEBUG   machine:run_fetches   TICK:   31 | AC       2 | IR: ST   | ADDR:   15 | PC:  25 | DR:       0 | SP :    0 | mem[ADDR]       2 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   34 | AC       3 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   37 | AC       2 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   41 | AC       2 | IR: LD   | ADDR:   13 | PC:  28 | DR:       2 | SP :    0 | mem[ADDR]       2 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   45 | AC       2 | IR: ST   | ADDR:   14 | PC:  29 | DR:       0 | SP :    0 | mem[ADDR]       2 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   49 | AC       3 | IR: ADD  | ADDR:   12 | PC:  30 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   53 | AC       3 | IR: ST   | ADDR:   13 | PC:  31 | DR:       2 | SP :    0 | mem[ADDR]       3 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:   57 | AC       2 | IR: LD   | ADDR:   14 | PC:  32 | DR:       2 | SP :    0 | mem[ADDR]       2 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:   61 | AC       2 | IR: ST   | ADDR:   12 | PC:  33 | DR:       1 | SP :    0 | mem[ADDR]       2 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   64 | AC       2 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   68 | AC       3 | IR: LD   | ADDR:   13 | PC:  18 | DR:       3 | SP :    0 | mem[ADDR]       3 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   72 | AC       3 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   74 | AC       3 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   78 | AC       3 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   81 | AC       3 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   84 | AC       4 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   87 | AC       3 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   91 | AC       3 | IR: LD   | ADDR:   13 | PC:  28 | DR:       3 | SP :    0 | mem[ADDR]       3 | ToMEM :   2 |
+  DEBUG   machine:run_fetches   TICK:   95 | AC       3 | IR: ST   | ADDR:   14 | PC:  29 | DR:       2 | SP :    0 | mem[ADDR]       3 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:   99 | AC       5 | IR: ADD  | ADDR:   12 | PC:  30 | DR:       2 | SP :    0 | mem[ADDR]       2 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  103 | AC       5 | IR: ST   | ADDR:   13 | PC:  31 | DR:       3 | SP :    0 | mem[ADDR]       5 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  107 | AC       3 | IR: LD   | ADDR:   14 | PC:  32 | DR:       3 | SP :    0 | mem[ADDR]       3 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  111 | AC       3 | IR: ST   | ADDR:   12 | PC:  33 | DR:       2 | SP :    0 | mem[ADDR]       3 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  114 | AC       3 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  118 | AC       5 | IR: LD   | ADDR:   13 | PC:  18 | DR:       5 | SP :    0 | mem[ADDR]       5 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  122 | AC       5 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  124 | AC       5 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  128 | AC       5 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  131 | AC       5 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  134 | AC       6 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  137 | AC       5 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  141 | AC       5 | IR: LD   | ADDR:   13 | PC:  28 | DR:       5 | SP :    0 | mem[ADDR]       5 | ToMEM :   3 |
+  DEBUG   machine:run_fetches   TICK:  145 | AC       5 | IR: ST   | ADDR:   14 | PC:  29 | DR:       3 | SP :    0 | mem[ADDR]       5 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  149 | AC       8 | IR: ADD  | ADDR:   12 | PC:  30 | DR:       3 | SP :    0 | mem[ADDR]       3 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  153 | AC       8 | IR: ST   | ADDR:   13 | PC:  31 | DR:       5 | SP :    0 | mem[ADDR]       8 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  157 | AC       5 | IR: LD   | ADDR:   14 | PC:  32 | DR:       5 | SP :    0 | mem[ADDR]       5 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  161 | AC       5 | IR: ST   | ADDR:   12 | PC:  33 | DR:       3 | SP :    0 | mem[ADDR]       5 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  164 | AC       5 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  168 | AC       8 | IR: LD   | ADDR:   13 | PC:  18 | DR:       8 | SP :    0 | mem[ADDR]       8 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  172 | AC       8 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  174 | AC       8 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  178 | AC       8 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  180 | AC       8 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  184 | AC       2 | IR: LD   | ADDR:   15 | PC:  23 | DR:       2 | SP :    0 | mem[ADDR]       2 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  188 | AC      10 | IR: ADD  | ADDR:   13 | PC:  24 | DR:       8 | SP :    0 | mem[ADDR]       8 | ToMEM :   5 |
+  DEBUG   machine:run_fetches   TICK:  192 | AC      10 | IR: ST   | ADDR:   15 | PC:  25 | DR:       2 | SP :    0 | mem[ADDR]      10 | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  195 | AC      11 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  198 | AC      10 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  202 | AC       8 | IR: LD   | ADDR:   13 | PC:  28 | DR:       8 | SP :    0 | mem[ADDR]       8 | ToMEM :  10 |
+  DEBUG   machine:run_fetches   TICK:  206 | AC       8 | IR: ST   | ADDR:   14 | PC:  29 | DR:       5 | SP :    0 | mem[ADDR]       8 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  210 | AC      13 | IR: ADD  | ADDR:   12 | PC:  30 | DR:       5 | SP :    0 | mem[ADDR]       5 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  214 | AC      13 | IR: ST   | ADDR:   13 | PC:  31 | DR:       8 | SP :    0 | mem[ADDR]      13 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  218 | AC       8 | IR: LD   | ADDR:   14 | PC:  32 | DR:       8 | SP :    0 | mem[ADDR]       8 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  222 | AC       8 | IR: ST   | ADDR:   12 | PC:  33 | DR:       5 | SP :    0 | mem[ADDR]       8 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  225 | AC       8 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  229 | AC      13 | IR: LD   | ADDR:   13 | PC:  18 | DR:      13 | SP :    0 | mem[ADDR]      13 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  233 | AC      13 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  235 | AC      13 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  239 | AC      13 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  242 | AC      13 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  245 | AC      14 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  248 | AC      13 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  252 | AC      13 | IR: LD   | ADDR:   13 | PC:  28 | DR:      13 | SP :    0 | mem[ADDR]      13 | ToMEM :   8 |
+  DEBUG   machine:run_fetches   TICK:  256 | AC      13 | IR: ST   | ADDR:   14 | PC:  29 | DR:       8 | SP :    0 | mem[ADDR]      13 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  260 | AC      21 | IR: ADD  | ADDR:   12 | PC:  30 | DR:       8 | SP :    0 | mem[ADDR]       8 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  264 | AC      21 | IR: ST   | ADDR:   13 | PC:  31 | DR:      13 | SP :    0 | mem[ADDR]      21 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  268 | AC      13 | IR: LD   | ADDR:   14 | PC:  32 | DR:      13 | SP :    0 | mem[ADDR]      13 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  272 | AC      13 | IR: ST   | ADDR:   12 | PC:  33 | DR:       8 | SP :    0 | mem[ADDR]      13 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  275 | AC      13 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  279 | AC      21 | IR: LD   | ADDR:   13 | PC:  18 | DR:      21 | SP :    0 | mem[ADDR]      21 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  283 | AC      21 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  285 | AC      21 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  289 | AC      21 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  292 | AC      21 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  295 | AC      22 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  298 | AC      21 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  302 | AC      21 | IR: LD   | ADDR:   13 | PC:  28 | DR:      21 | SP :    0 | mem[ADDR]      21 | ToMEM :  13 |
+  DEBUG   machine:run_fetches   TICK:  306 | AC      21 | IR: ST   | ADDR:   14 | PC:  29 | DR:      13 | SP :    0 | mem[ADDR]      21 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  310 | AC      34 | IR: ADD  | ADDR:   12 | PC:  30 | DR:      13 | SP :    0 | mem[ADDR]      13 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  314 | AC      34 | IR: ST   | ADDR:   13 | PC:  31 | DR:      21 | SP :    0 | mem[ADDR]      34 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  318 | AC      21 | IR: LD   | ADDR:   14 | PC:  32 | DR:      21 | SP :    0 | mem[ADDR]      21 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  322 | AC      21 | IR: ST   | ADDR:   12 | PC:  33 | DR:      13 | SP :    0 | mem[ADDR]      21 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  325 | AC      21 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  329 | AC      34 | IR: LD   | ADDR:   13 | PC:  18 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  333 | AC      34 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  335 | AC      34 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  339 | AC      34 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  341 | AC      34 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  345 | AC      10 | IR: LD   | ADDR:   15 | PC:  23 | DR:      10 | SP :    0 | mem[ADDR]      10 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  349 | AC      44 | IR: ADD  | ADDR:   13 | PC:  24 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  21 |
+  DEBUG   machine:run_fetches   TICK:  353 | AC      44 | IR: ST   | ADDR:   15 | PC:  25 | DR:      10 | SP :    0 | mem[ADDR]      44 | ToMEM :  44 |
+  DEBUG   machine:run_fetches   TICK:  356 | AC      45 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  44 |
+  DEBUG   machine:run_fetches   TICK:  359 | AC      44 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  44 |
+  DEBUG   machine:run_fetches   TICK:  363 | AC      34 | IR: LD   | ADDR:   13 | PC:  28 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  44 |
+  DEBUG   machine:run_fetches   TICK:  367 | AC      34 | IR: ST   | ADDR:   14 | PC:  29 | DR:      21 | SP :    0 | mem[ADDR]      34 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  371 | AC      55 | IR: ADD  | ADDR:   12 | PC:  30 | DR:      21 | SP :    0 | mem[ADDR]      21 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  375 | AC      55 | IR: ST   | ADDR:   13 | PC:  31 | DR:      34 | SP :    0 | mem[ADDR]      55 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  379 | AC      34 | IR: LD   | ADDR:   14 | PC:  32 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  383 | AC      34 | IR: ST   | ADDR:   12 | PC:  33 | DR:      21 | SP :    0 | mem[ADDR]      34 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  386 | AC      34 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  390 | AC      55 | IR: LD   | ADDR:   13 | PC:  18 | DR:      55 | SP :    0 | mem[ADDR]      55 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  394 | AC      55 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  396 | AC      55 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  400 | AC      55 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  403 | AC      55 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  406 | AC      56 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  409 | AC      55 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  413 | AC      55 | IR: LD   | ADDR:   13 | PC:  28 | DR:      55 | SP :    0 | mem[ADDR]      55 | ToMEM :  34 |
+  DEBUG   machine:run_fetches   TICK:  417 | AC      55 | IR: ST   | ADDR:   14 | PC:  29 | DR:      34 | SP :    0 | mem[ADDR]      55 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  421 | AC      89 | IR: ADD  | ADDR:   12 | PC:  30 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  425 | AC      89 | IR: ST   | ADDR:   13 | PC:  31 | DR:      55 | SP :    0 | mem[ADDR]      89 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  429 | AC      55 | IR: LD   | ADDR:   14 | PC:  32 | DR:      55 | SP :    0 | mem[ADDR]      55 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  433 | AC      55 | IR: ST   | ADDR:   12 | PC:  33 | DR:      34 | SP :    0 | mem[ADDR]      55 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  436 | AC      55 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  440 | AC      89 | IR: LD   | ADDR:   13 | PC:  18 | DR:      89 | SP :    0 | mem[ADDR]      89 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  444 | AC      89 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  446 | AC      89 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  450 | AC      89 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  453 | AC      89 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  456 | AC      90 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  459 | AC      89 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  463 | AC      89 | IR: LD   | ADDR:   13 | PC:  28 | DR:      89 | SP :    0 | mem[ADDR]      89 | ToMEM :  55 |
+  DEBUG   machine:run_fetches   TICK:  467 | AC      89 | IR: ST   | ADDR:   14 | PC:  29 | DR:      55 | SP :    0 | mem[ADDR]      89 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  471 | AC     144 | IR: ADD  | ADDR:   12 | PC:  30 | DR:      55 | SP :    0 | mem[ADDR]      55 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  475 | AC     144 | IR: ST   | ADDR:   13 | PC:  31 | DR:      89 | SP :    0 | mem[ADDR]     144 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  479 | AC      89 | IR: LD   | ADDR:   14 | PC:  32 | DR:      89 | SP :    0 | mem[ADDR]      89 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  483 | AC      89 | IR: ST   | ADDR:   12 | PC:  33 | DR:      55 | SP :    0 | mem[ADDR]      89 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  486 | AC      89 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  490 | AC     144 | IR: LD   | ADDR:   13 | PC:  18 | DR:     144 | SP :    0 | mem[ADDR]     144 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  494 | AC     144 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  496 | AC     144 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  500 | AC     144 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  502 | AC     144 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  506 | AC      44 | IR: LD   | ADDR:   15 | PC:  23 | DR:      44 | SP :    0 | mem[ADDR]      44 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  510 | AC     188 | IR: ADD  | ADDR:   13 | PC:  24 | DR:     144 | SP :    0 | mem[ADDR]     144 | ToMEM :  89 |
+  DEBUG   machine:run_fetches   TICK:  514 | AC     188 | IR: ST   | ADDR:   15 | PC:  25 | DR:      44 | SP :    0 | mem[ADDR]     188 | ToMEM : 188 |
+  DEBUG   machine:run_fetches   TICK:  517 | AC     189 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 188 |
+  DEBUG   machine:run_fetches   TICK:  520 | AC     188 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 188 |
+  DEBUG   machine:run_fetches   TICK:  524 | AC     144 | IR: LD   | ADDR:   13 | PC:  28 | DR:     144 | SP :    0 | mem[ADDR]     144 | ToMEM : 188 |
+  DEBUG   machine:run_fetches   TICK:  528 | AC     144 | IR: ST   | ADDR:   14 | PC:  29 | DR:      89 | SP :    0 | mem[ADDR]     144 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  532 | AC     233 | IR: ADD  | ADDR:   12 | PC:  30 | DR:      89 | SP :    0 | mem[ADDR]      89 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  536 | AC     233 | IR: ST   | ADDR:   13 | PC:  31 | DR:     144 | SP :    0 | mem[ADDR]     233 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  540 | AC     144 | IR: LD   | ADDR:   14 | PC:  32 | DR:     144 | SP :    0 | mem[ADDR]     144 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  544 | AC     144 | IR: ST   | ADDR:   12 | PC:  33 | DR:      89 | SP :    0 | mem[ADDR]     144 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  547 | AC     144 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  551 | AC     233 | IR: LD   | ADDR:   13 | PC:  18 | DR:     233 | SP :    0 | mem[ADDR]     233 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  555 | AC     233 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  557 | AC     233 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  561 | AC     233 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  564 | AC     233 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  567 | AC     234 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  570 | AC     233 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  574 | AC     233 | IR: LD   | ADDR:   13 | PC:  28 | DR:     233 | SP :    0 | mem[ADDR]     233 | ToMEM : 144 |
+  DEBUG   machine:run_fetches   TICK:  578 | AC     233 | IR: ST   | ADDR:   14 | PC:  29 | DR:     144 | SP :    0 | mem[ADDR]     233 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  582 | AC     377 | IR: ADD  | ADDR:   12 | PC:  30 | DR:     144 | SP :    0 | mem[ADDR]     144 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  586 | AC     377 | IR: ST   | ADDR:   13 | PC:  31 | DR:     233 | SP :    0 | mem[ADDR]     377 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  590 | AC     233 | IR: LD   | ADDR:   14 | PC:  32 | DR:     233 | SP :    0 | mem[ADDR]     233 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  594 | AC     233 | IR: ST   | ADDR:   12 | PC:  33 | DR:     144 | SP :    0 | mem[ADDR]     233 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  597 | AC     233 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  601 | AC     377 | IR: LD   | ADDR:   13 | PC:  18 | DR:     377 | SP :    0 | mem[ADDR]     377 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  605 | AC     377 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  607 | AC     377 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  611 | AC     377 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  614 | AC     377 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  617 | AC     378 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  620 | AC     377 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  624 | AC     377 | IR: LD   | ADDR:   13 | PC:  28 | DR:     377 | SP :    0 | mem[ADDR]     377 | ToMEM : 233 |
+  DEBUG   machine:run_fetches   TICK:  628 | AC     377 | IR: ST   | ADDR:   14 | PC:  29 | DR:     233 | SP :    0 | mem[ADDR]     377 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  632 | AC     610 | IR: ADD  | ADDR:   12 | PC:  30 | DR:     233 | SP :    0 | mem[ADDR]     233 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  636 | AC     610 | IR: ST   | ADDR:   13 | PC:  31 | DR:     377 | SP :    0 | mem[ADDR]     610 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  640 | AC     377 | IR: LD   | ADDR:   14 | PC:  32 | DR:     377 | SP :    0 | mem[ADDR]     377 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  644 | AC     377 | IR: ST   | ADDR:   12 | PC:  33 | DR:     233 | SP :    0 | mem[ADDR]     377 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  647 | AC     377 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  651 | AC     610 | IR: LD   | ADDR:   13 | PC:  18 | DR:     610 | SP :    0 | mem[ADDR]     610 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  655 | AC     610 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  657 | AC     610 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  661 | AC     610 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  663 | AC     610 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  667 | AC     188 | IR: LD   | ADDR:   15 | PC:  23 | DR:     188 | SP :    0 | mem[ADDR]     188 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  671 | AC     798 | IR: ADD  | ADDR:   13 | PC:  24 | DR:     610 | SP :    0 | mem[ADDR]     610 | ToMEM : 377 |
+  DEBUG   machine:run_fetches   TICK:  675 | AC     798 | IR: ST   | ADDR:   15 | PC:  25 | DR:     188 | SP :    0 | mem[ADDR]     798 | ToMEM : 798 |
+  DEBUG   machine:run_fetches   TICK:  678 | AC     799 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 798 |
+  DEBUG   machine:run_fetches   TICK:  681 | AC     798 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 798 |
+  DEBUG   machine:run_fetches   TICK:  685 | AC     610 | IR: LD   | ADDR:   13 | PC:  28 | DR:     610 | SP :    0 | mem[ADDR]     610 | ToMEM : 798 |
+  DEBUG   machine:run_fetches   TICK:  689 | AC     610 | IR: ST   | ADDR:   14 | PC:  29 | DR:     377 | SP :    0 | mem[ADDR]     610 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  693 | AC     987 | IR: ADD  | ADDR:   12 | PC:  30 | DR:     377 | SP :    0 | mem[ADDR]     377 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  697 | AC     987 | IR: ST   | ADDR:   13 | PC:  31 | DR:     610 | SP :    0 | mem[ADDR]     987 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  701 | AC     610 | IR: LD   | ADDR:   14 | PC:  32 | DR:     610 | SP :    0 | mem[ADDR]     610 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  705 | AC     610 | IR: ST   | ADDR:   12 | PC:  33 | DR:     377 | SP :    0 | mem[ADDR]     610 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  708 | AC     610 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  712 | AC     987 | IR: LD   | ADDR:   13 | PC:  18 | DR:     987 | SP :    0 | mem[ADDR]     987 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  716 | AC     987 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  718 | AC     987 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  722 | AC     987 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  725 | AC     987 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  728 | AC     988 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  731 | AC     987 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  735 | AC     987 | IR: LD   | ADDR:   13 | PC:  28 | DR:     987 | SP :    0 | mem[ADDR]     987 | ToMEM : 610 |
+  DEBUG   machine:run_fetches   TICK:  739 | AC     987 | IR: ST   | ADDR:   14 | PC:  29 | DR:     610 | SP :    0 | mem[ADDR]     987 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  743 | AC    1597 | IR: ADD  | ADDR:   12 | PC:  30 | DR:     610 | SP :    0 | mem[ADDR]     610 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  747 | AC    1597 | IR: ST   | ADDR:   13 | PC:  31 | DR:     987 | SP :    0 | mem[ADDR]    1597 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  751 | AC     987 | IR: LD   | ADDR:   14 | PC:  32 | DR:     987 | SP :    0 | mem[ADDR]     987 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  755 | AC     987 | IR: ST   | ADDR:   12 | PC:  33 | DR:     610 | SP :    0 | mem[ADDR]     987 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  758 | AC     987 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  762 | AC    1597 | IR: LD   | ADDR:   13 | PC:  18 | DR:    1597 | SP :    0 | mem[ADDR]    1597 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  766 | AC    1597 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  768 | AC    1597 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  772 | AC    1597 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  775 | AC    1597 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  778 | AC    1598 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  781 | AC    1597 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  785 | AC    1597 | IR: LD   | ADDR:   13 | PC:  28 | DR:    1597 | SP :    0 | mem[ADDR]    1597 | ToMEM : 987 |
+  DEBUG   machine:run_fetches   TICK:  789 | AC    1597 | IR: ST   | ADDR:   14 | PC:  29 | DR:     987 | SP :    0 | mem[ADDR]    1597 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  793 | AC    2584 | IR: ADD  | ADDR:   12 | PC:  30 | DR:     987 | SP :    0 | mem[ADDR]     987 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  797 | AC    2584 | IR: ST   | ADDR:   13 | PC:  31 | DR:    1597 | SP :    0 | mem[ADDR]    2584 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  801 | AC    1597 | IR: LD   | ADDR:   14 | PC:  32 | DR:    1597 | SP :    0 | mem[ADDR]    1597 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  805 | AC    1597 | IR: ST   | ADDR:   12 | PC:  33 | DR:     987 | SP :    0 | mem[ADDR]    1597 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  808 | AC    1597 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  812 | AC    2584 | IR: LD   | ADDR:   13 | PC:  18 | DR:    2584 | SP :    0 | mem[ADDR]    2584 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  816 | AC    2584 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  818 | AC    2584 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  822 | AC    2584 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  824 | AC    2584 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  828 | AC     798 | IR: LD   | ADDR:   15 | PC:  23 | DR:     798 | SP :    0 | mem[ADDR]     798 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  832 | AC    3382 | IR: ADD  | ADDR:   13 | PC:  24 | DR:    2584 | SP :    0 | mem[ADDR]    2584 | ToMEM : 1597 |
+  DEBUG   machine:run_fetches   TICK:  836 | AC    3382 | IR: ST   | ADDR:   15 | PC:  25 | DR:     798 | SP :    0 | mem[ADDR]    3382 | ToMEM : 3382 |
+  DEBUG   machine:run_fetches   TICK:  839 | AC    3383 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 3382 |
+  DEBUG   machine:run_fetches   TICK:  842 | AC    3382 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 3382 |
+  DEBUG   machine:run_fetches   TICK:  846 | AC    2584 | IR: LD   | ADDR:   13 | PC:  28 | DR:    2584 | SP :    0 | mem[ADDR]    2584 | ToMEM : 3382 |
+  DEBUG   machine:run_fetches   TICK:  850 | AC    2584 | IR: ST   | ADDR:   14 | PC:  29 | DR:    1597 | SP :    0 | mem[ADDR]    2584 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  854 | AC    4181 | IR: ADD  | ADDR:   12 | PC:  30 | DR:    1597 | SP :    0 | mem[ADDR]    1597 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  858 | AC    4181 | IR: ST   | ADDR:   13 | PC:  31 | DR:    2584 | SP :    0 | mem[ADDR]    4181 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  862 | AC    2584 | IR: LD   | ADDR:   14 | PC:  32 | DR:    2584 | SP :    0 | mem[ADDR]    2584 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  866 | AC    2584 | IR: ST   | ADDR:   12 | PC:  33 | DR:    1597 | SP :    0 | mem[ADDR]    2584 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  869 | AC    2584 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  873 | AC    4181 | IR: LD   | ADDR:   13 | PC:  18 | DR:    4181 | SP :    0 | mem[ADDR]    4181 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  877 | AC    4181 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  879 | AC    4181 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  883 | AC    4181 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  886 | AC    4181 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  889 | AC    4182 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  892 | AC    4181 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  896 | AC    4181 | IR: LD   | ADDR:   13 | PC:  28 | DR:    4181 | SP :    0 | mem[ADDR]    4181 | ToMEM : 2584 |
+  DEBUG   machine:run_fetches   TICK:  900 | AC    4181 | IR: ST   | ADDR:   14 | PC:  29 | DR:    2584 | SP :    0 | mem[ADDR]    4181 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  904 | AC    6765 | IR: ADD  | ADDR:   12 | PC:  30 | DR:    2584 | SP :    0 | mem[ADDR]    2584 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  908 | AC    6765 | IR: ST   | ADDR:   13 | PC:  31 | DR:    4181 | SP :    0 | mem[ADDR]    6765 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  912 | AC    4181 | IR: LD   | ADDR:   14 | PC:  32 | DR:    4181 | SP :    0 | mem[ADDR]    4181 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  916 | AC    4181 | IR: ST   | ADDR:   12 | PC:  33 | DR:    2584 | SP :    0 | mem[ADDR]    4181 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  919 | AC    4181 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  923 | AC    6765 | IR: LD   | ADDR:   13 | PC:  18 | DR:    6765 | SP :    0 | mem[ADDR]    6765 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  927 | AC    6765 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  929 | AC    6765 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  933 | AC    6765 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  936 | AC    6765 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  939 | AC    6766 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  942 | AC    6765 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  946 | AC    6765 | IR: LD   | ADDR:   13 | PC:  28 | DR:    6765 | SP :    0 | mem[ADDR]    6765 | ToMEM : 4181 |
+  DEBUG   machine:run_fetches   TICK:  950 | AC    6765 | IR: ST   | ADDR:   14 | PC:  29 | DR:    4181 | SP :    0 | mem[ADDR]    6765 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  954 | AC   10946 | IR: ADD  | ADDR:   12 | PC:  30 | DR:    4181 | SP :    0 | mem[ADDR]    4181 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  958 | AC   10946 | IR: ST   | ADDR:   13 | PC:  31 | DR:    6765 | SP :    0 | mem[ADDR]   10946 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK:  962 | AC    6765 | IR: LD   | ADDR:   14 | PC:  32 | DR:    6765 | SP :    0 | mem[ADDR]    6765 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK:  966 | AC    6765 | IR: ST   | ADDR:   12 | PC:  33 | DR:    4181 | SP :    0 | mem[ADDR]    6765 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  969 | AC    6765 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  973 | AC   10946 | IR: LD   | ADDR:   13 | PC:  18 | DR:   10946 | SP :    0 | mem[ADDR]   10946 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  977 | AC   10946 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  979 | AC   10946 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  983 | AC   10946 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  985 | AC   10946 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  989 | AC    3382 | IR: LD   | ADDR:   15 | PC:  23 | DR:    3382 | SP :    0 | mem[ADDR]    3382 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  993 | AC   14328 | IR: ADD  | ADDR:   13 | PC:  24 | DR:   10946 | SP :    0 | mem[ADDR]   10946 | ToMEM : 6765 |
+  DEBUG   machine:run_fetches   TICK:  997 | AC   14328 | IR: ST   | ADDR:   15 | PC:  25 | DR:    3382 | SP :    0 | mem[ADDR]   14328 | ToMEM : 14328 |
+  DEBUG   machine:run_fetches   TICK: 1000 | AC   14329 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 14328 |
+  DEBUG   machine:run_fetches   TICK: 1003 | AC   14328 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 14328 |
+  DEBUG   machine:run_fetches   TICK: 1007 | AC   10946 | IR: LD   | ADDR:   13 | PC:  28 | DR:   10946 | SP :    0 | mem[ADDR]   10946 | ToMEM : 14328 |
+  DEBUG   machine:run_fetches   TICK: 1011 | AC   10946 | IR: ST   | ADDR:   14 | PC:  29 | DR:    6765 | SP :    0 | mem[ADDR]   10946 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1015 | AC   17711 | IR: ADD  | ADDR:   12 | PC:  30 | DR:    6765 | SP :    0 | mem[ADDR]    6765 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1019 | AC   17711 | IR: ST   | ADDR:   13 | PC:  31 | DR:   10946 | SP :    0 | mem[ADDR]   17711 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1023 | AC   10946 | IR: LD   | ADDR:   14 | PC:  32 | DR:   10946 | SP :    0 | mem[ADDR]   10946 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1027 | AC   10946 | IR: ST   | ADDR:   12 | PC:  33 | DR:    6765 | SP :    0 | mem[ADDR]   10946 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1030 | AC   10946 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1034 | AC   17711 | IR: LD   | ADDR:   13 | PC:  18 | DR:   17711 | SP :    0 | mem[ADDR]   17711 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1038 | AC   17711 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1040 | AC   17711 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1044 | AC   17711 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1047 | AC   17711 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1050 | AC   17712 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1053 | AC   17711 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1057 | AC   17711 | IR: LD   | ADDR:   13 | PC:  28 | DR:   17711 | SP :    0 | mem[ADDR]   17711 | ToMEM : 10946 |
+  DEBUG   machine:run_fetches   TICK: 1061 | AC   17711 | IR: ST   | ADDR:   14 | PC:  29 | DR:   10946 | SP :    0 | mem[ADDR]   17711 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1065 | AC   28657 | IR: ADD  | ADDR:   12 | PC:  30 | DR:   10946 | SP :    0 | mem[ADDR]   10946 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1069 | AC   28657 | IR: ST   | ADDR:   13 | PC:  31 | DR:   17711 | SP :    0 | mem[ADDR]   28657 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1073 | AC   17711 | IR: LD   | ADDR:   14 | PC:  32 | DR:   17711 | SP :    0 | mem[ADDR]   17711 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1077 | AC   17711 | IR: ST   | ADDR:   12 | PC:  33 | DR:   10946 | SP :    0 | mem[ADDR]   17711 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1080 | AC   17711 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1084 | AC   28657 | IR: LD   | ADDR:   13 | PC:  18 | DR:   28657 | SP :    0 | mem[ADDR]   28657 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1088 | AC   28657 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1090 | AC   28657 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1094 | AC   28657 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1097 | AC   28657 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1100 | AC   28658 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1103 | AC   28657 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1107 | AC   28657 | IR: LD   | ADDR:   13 | PC:  28 | DR:   28657 | SP :    0 | mem[ADDR]   28657 | ToMEM : 17711 |
+  DEBUG   machine:run_fetches   TICK: 1111 | AC   28657 | IR: ST   | ADDR:   14 | PC:  29 | DR:   17711 | SP :    0 | mem[ADDR]   28657 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1115 | AC   46368 | IR: ADD  | ADDR:   12 | PC:  30 | DR:   17711 | SP :    0 | mem[ADDR]   17711 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1119 | AC   46368 | IR: ST   | ADDR:   13 | PC:  31 | DR:   28657 | SP :    0 | mem[ADDR]   46368 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1123 | AC   28657 | IR: LD   | ADDR:   14 | PC:  32 | DR:   28657 | SP :    0 | mem[ADDR]   28657 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1127 | AC   28657 | IR: ST   | ADDR:   12 | PC:  33 | DR:   17711 | SP :    0 | mem[ADDR]   28657 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1130 | AC   28657 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1134 | AC   46368 | IR: LD   | ADDR:   13 | PC:  18 | DR:   46368 | SP :    0 | mem[ADDR]   46368 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1138 | AC   46368 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1140 | AC   46368 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1144 | AC   46368 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1146 | AC   46368 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1150 | AC   14328 | IR: LD   | ADDR:   15 | PC:  23 | DR:   14328 | SP :    0 | mem[ADDR]   14328 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1154 | AC   60696 | IR: ADD  | ADDR:   13 | PC:  24 | DR:   46368 | SP :    0 | mem[ADDR]   46368 | ToMEM : 28657 |
+  DEBUG   machine:run_fetches   TICK: 1158 | AC   60696 | IR: ST   | ADDR:   15 | PC:  25 | DR:   14328 | SP :    0 | mem[ADDR]   60696 | ToMEM : 60696 |
+  DEBUG   machine:run_fetches   TICK: 1161 | AC   60697 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 60696 |
+  DEBUG   machine:run_fetches   TICK: 1164 | AC   60696 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 60696 |
+  DEBUG   machine:run_fetches   TICK: 1168 | AC   46368 | IR: LD   | ADDR:   13 | PC:  28 | DR:   46368 | SP :    0 | mem[ADDR]   46368 | ToMEM : 60696 |
+  DEBUG   machine:run_fetches   TICK: 1172 | AC   46368 | IR: ST   | ADDR:   14 | PC:  29 | DR:   28657 | SP :    0 | mem[ADDR]   46368 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1176 | AC   75025 | IR: ADD  | ADDR:   12 | PC:  30 | DR:   28657 | SP :    0 | mem[ADDR]   28657 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1180 | AC   75025 | IR: ST   | ADDR:   13 | PC:  31 | DR:   46368 | SP :    0 | mem[ADDR]   75025 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1184 | AC   46368 | IR: LD   | ADDR:   14 | PC:  32 | DR:   46368 | SP :    0 | mem[ADDR]   46368 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1188 | AC   46368 | IR: ST   | ADDR:   12 | PC:  33 | DR:   28657 | SP :    0 | mem[ADDR]   46368 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1191 | AC   46368 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1195 | AC   75025 | IR: LD   | ADDR:   13 | PC:  18 | DR:   75025 | SP :    0 | mem[ADDR]   75025 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1199 | AC   75025 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1201 | AC   75025 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1205 | AC   75025 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1208 | AC   75025 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1211 | AC   75026 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1214 | AC   75025 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1218 | AC   75025 | IR: LD   | ADDR:   13 | PC:  28 | DR:   75025 | SP :    0 | mem[ADDR]   75025 | ToMEM : 46368 |
+  DEBUG   machine:run_fetches   TICK: 1222 | AC   75025 | IR: ST   | ADDR:   14 | PC:  29 | DR:   46368 | SP :    0 | mem[ADDR]   75025 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1226 | AC  121393 | IR: ADD  | ADDR:   12 | PC:  30 | DR:   46368 | SP :    0 | mem[ADDR]   46368 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1230 | AC  121393 | IR: ST   | ADDR:   13 | PC:  31 | DR:   75025 | SP :    0 | mem[ADDR]  121393 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1234 | AC   75025 | IR: LD   | ADDR:   14 | PC:  32 | DR:   75025 | SP :    0 | mem[ADDR]   75025 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1238 | AC   75025 | IR: ST   | ADDR:   12 | PC:  33 | DR:   46368 | SP :    0 | mem[ADDR]   75025 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1241 | AC   75025 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1245 | AC  121393 | IR: LD   | ADDR:   13 | PC:  18 | DR:  121393 | SP :    0 | mem[ADDR]  121393 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1249 | AC  121393 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1251 | AC  121393 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1255 | AC  121393 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1258 | AC  121393 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1261 | AC  121394 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1264 | AC  121393 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1268 | AC  121393 | IR: LD   | ADDR:   13 | PC:  28 | DR:  121393 | SP :    0 | mem[ADDR]  121393 | ToMEM : 75025 |
+  DEBUG   machine:run_fetches   TICK: 1272 | AC  121393 | IR: ST   | ADDR:   14 | PC:  29 | DR:   75025 | SP :    0 | mem[ADDR]  121393 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1276 | AC  196418 | IR: ADD  | ADDR:   12 | PC:  30 | DR:   75025 | SP :    0 | mem[ADDR]   75025 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1280 | AC  196418 | IR: ST   | ADDR:   13 | PC:  31 | DR:  121393 | SP :    0 | mem[ADDR]  196418 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1284 | AC  121393 | IR: LD   | ADDR:   14 | PC:  32 | DR:  121393 | SP :    0 | mem[ADDR]  121393 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1288 | AC  121393 | IR: ST   | ADDR:   12 | PC:  33 | DR:   75025 | SP :    0 | mem[ADDR]  121393 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1291 | AC  121393 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1295 | AC  196418 | IR: LD   | ADDR:   13 | PC:  18 | DR:  196418 | SP :    0 | mem[ADDR]  196418 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1299 | AC  196418 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1301 | AC  196418 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1305 | AC  196418 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1307 | AC  196418 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1311 | AC   60696 | IR: LD   | ADDR:   15 | PC:  23 | DR:   60696 | SP :    0 | mem[ADDR]   60696 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1315 | AC  257114 | IR: ADD  | ADDR:   13 | PC:  24 | DR:  196418 | SP :    0 | mem[ADDR]  196418 | ToMEM : 121393 |
+  DEBUG   machine:run_fetches   TICK: 1319 | AC  257114 | IR: ST   | ADDR:   15 | PC:  25 | DR:   60696 | SP :    0 | mem[ADDR]  257114 | ToMEM : 257114 |
+  DEBUG   machine:run_fetches   TICK: 1322 | AC  257115 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 257114 |
+  DEBUG   machine:run_fetches   TICK: 1325 | AC  257114 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 257114 |
+  DEBUG   machine:run_fetches   TICK: 1329 | AC  196418 | IR: LD   | ADDR:   13 | PC:  28 | DR:  196418 | SP :    0 | mem[ADDR]  196418 | ToMEM : 257114 |
+  DEBUG   machine:run_fetches   TICK: 1333 | AC  196418 | IR: ST   | ADDR:   14 | PC:  29 | DR:  121393 | SP :    0 | mem[ADDR]  196418 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1337 | AC  317811 | IR: ADD  | ADDR:   12 | PC:  30 | DR:  121393 | SP :    0 | mem[ADDR]  121393 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1341 | AC  317811 | IR: ST   | ADDR:   13 | PC:  31 | DR:  196418 | SP :    0 | mem[ADDR]  317811 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1345 | AC  196418 | IR: LD   | ADDR:   14 | PC:  32 | DR:  196418 | SP :    0 | mem[ADDR]  196418 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1349 | AC  196418 | IR: ST   | ADDR:   12 | PC:  33 | DR:  121393 | SP :    0 | mem[ADDR]  196418 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1352 | AC  196418 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1356 | AC  317811 | IR: LD   | ADDR:   13 | PC:  18 | DR:  317811 | SP :    0 | mem[ADDR]  317811 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1360 | AC  317811 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1362 | AC  317811 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1366 | AC  317811 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1369 | AC  317811 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1372 | AC  317812 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1375 | AC  317811 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1379 | AC  317811 | IR: LD   | ADDR:   13 | PC:  28 | DR:  317811 | SP :    0 | mem[ADDR]  317811 | ToMEM : 196418 |
+  DEBUG   machine:run_fetches   TICK: 1383 | AC  317811 | IR: ST   | ADDR:   14 | PC:  29 | DR:  196418 | SP :    0 | mem[ADDR]  317811 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1387 | AC  514229 | IR: ADD  | ADDR:   12 | PC:  30 | DR:  196418 | SP :    0 | mem[ADDR]  196418 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1391 | AC  514229 | IR: ST   | ADDR:   13 | PC:  31 | DR:  317811 | SP :    0 | mem[ADDR]  514229 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1395 | AC  317811 | IR: LD   | ADDR:   14 | PC:  32 | DR:  317811 | SP :    0 | mem[ADDR]  317811 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1399 | AC  317811 | IR: ST   | ADDR:   12 | PC:  33 | DR:  196418 | SP :    0 | mem[ADDR]  317811 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1402 | AC  317811 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1406 | AC  514229 | IR: LD   | ADDR:   13 | PC:  18 | DR:  514229 | SP :    0 | mem[ADDR]  514229 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1410 | AC  514229 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1412 | AC  514229 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1416 | AC  514229 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1419 | AC  514229 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1422 | AC  514230 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1425 | AC  514229 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1429 | AC  514229 | IR: LD   | ADDR:   13 | PC:  28 | DR:  514229 | SP :    0 | mem[ADDR]  514229 | ToMEM : 317811 |
+  DEBUG   machine:run_fetches   TICK: 1433 | AC  514229 | IR: ST   | ADDR:   14 | PC:  29 | DR:  317811 | SP :    0 | mem[ADDR]  514229 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1437 | AC  832040 | IR: ADD  | ADDR:   12 | PC:  30 | DR:  317811 | SP :    0 | mem[ADDR]  317811 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1441 | AC  832040 | IR: ST   | ADDR:   13 | PC:  31 | DR:  514229 | SP :    0 | mem[ADDR]  832040 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1445 | AC  514229 | IR: LD   | ADDR:   14 | PC:  32 | DR:  514229 | SP :    0 | mem[ADDR]  514229 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1449 | AC  514229 | IR: ST   | ADDR:   12 | PC:  33 | DR:  317811 | SP :    0 | mem[ADDR]  514229 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1452 | AC  514229 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1456 | AC  832040 | IR: LD   | ADDR:   13 | PC:  18 | DR:  832040 | SP :    0 | mem[ADDR]  832040 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1460 | AC  832040 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1462 | AC  832040 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1466 | AC  832040 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1468 | AC  832040 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1472 | AC  257114 | IR: LD   | ADDR:   15 | PC:  23 | DR:  257114 | SP :    0 | mem[ADDR]  257114 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1476 | AC 1089154 | IR: ADD  | ADDR:   13 | PC:  24 | DR:  832040 | SP :    0 | mem[ADDR]  832040 | ToMEM : 514229 |
+  DEBUG   machine:run_fetches   TICK: 1480 | AC 1089154 | IR: ST   | ADDR:   15 | PC:  25 | DR:  257114 | SP :    0 | mem[ADDR] 1089154 | ToMEM : 1089154 |
+  DEBUG   machine:run_fetches   TICK: 1483 | AC 1089155 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 1089154 |
+  DEBUG   machine:run_fetches   TICK: 1486 | AC 1089154 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 1089154 |
+  DEBUG   machine:run_fetches   TICK: 1490 | AC  832040 | IR: LD   | ADDR:   13 | PC:  28 | DR:  832040 | SP :    0 | mem[ADDR]  832040 | ToMEM : 1089154 |
+  DEBUG   machine:run_fetches   TICK: 1494 | AC  832040 | IR: ST   | ADDR:   14 | PC:  29 | DR:  514229 | SP :    0 | mem[ADDR]  832040 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1498 | AC 1346269 | IR: ADD  | ADDR:   12 | PC:  30 | DR:  514229 | SP :    0 | mem[ADDR]  514229 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1502 | AC 1346269 | IR: ST   | ADDR:   13 | PC:  31 | DR:  832040 | SP :    0 | mem[ADDR] 1346269 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1506 | AC  832040 | IR: LD   | ADDR:   14 | PC:  32 | DR:  832040 | SP :    0 | mem[ADDR]  832040 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1510 | AC  832040 | IR: ST   | ADDR:   12 | PC:  33 | DR:  514229 | SP :    0 | mem[ADDR]  832040 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1513 | AC  832040 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1517 | AC 1346269 | IR: LD   | ADDR:   13 | PC:  18 | DR: 1346269 | SP :    0 | mem[ADDR] 1346269 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1521 | AC 1346269 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1523 | AC 1346269 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1527 | AC 1346269 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1530 | AC 1346269 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1533 | AC 1346270 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1536 | AC 1346269 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1540 | AC 1346269 | IR: LD   | ADDR:   13 | PC:  28 | DR: 1346269 | SP :    0 | mem[ADDR] 1346269 | ToMEM : 832040 |
+  DEBUG   machine:run_fetches   TICK: 1544 | AC 1346269 | IR: ST   | ADDR:   14 | PC:  29 | DR:  832040 | SP :    0 | mem[ADDR] 1346269 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1548 | AC 2178309 | IR: ADD  | ADDR:   12 | PC:  30 | DR:  832040 | SP :    0 | mem[ADDR]  832040 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1552 | AC 2178309 | IR: ST   | ADDR:   13 | PC:  31 | DR: 1346269 | SP :    0 | mem[ADDR] 2178309 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1556 | AC 1346269 | IR: LD   | ADDR:   14 | PC:  32 | DR: 1346269 | SP :    0 | mem[ADDR] 1346269 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1560 | AC 1346269 | IR: ST   | ADDR:   12 | PC:  33 | DR:  832040 | SP :    0 | mem[ADDR] 1346269 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1563 | AC 1346269 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1567 | AC 2178309 | IR: LD   | ADDR:   13 | PC:  18 | DR: 2178309 | SP :    0 | mem[ADDR] 2178309 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1571 | AC 2178309 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1573 | AC 2178309 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1577 | AC 2178309 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1580 | AC 2178309 | IR: JNZ  | ADDR:   21 | PC:  25 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1583 | AC 2178310 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1586 | AC 2178309 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1590 | AC 2178309 | IR: LD   | ADDR:   13 | PC:  28 | DR: 2178309 | SP :    0 | mem[ADDR] 2178309 | ToMEM : 1346269 |
+  DEBUG   machine:run_fetches   TICK: 1594 | AC 2178309 | IR: ST   | ADDR:   14 | PC:  29 | DR: 1346269 | SP :    0 | mem[ADDR] 2178309 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1598 | AC 3524578 | IR: ADD  | ADDR:   12 | PC:  30 | DR: 1346269 | SP :    0 | mem[ADDR] 1346269 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1602 | AC 3524578 | IR: ST   | ADDR:   13 | PC:  31 | DR: 2178309 | SP :    0 | mem[ADDR] 3524578 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1606 | AC 2178309 | IR: LD   | ADDR:   14 | PC:  32 | DR: 2178309 | SP :    0 | mem[ADDR] 2178309 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1610 | AC 2178309 | IR: ST   | ADDR:   12 | PC:  33 | DR: 1346269 | SP :    0 | mem[ADDR] 2178309 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1613 | AC 2178309 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1617 | AC 3524578 | IR: LD   | ADDR:   13 | PC:  18 | DR: 3524578 | SP :    0 | mem[ADDR] 3524578 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1621 | AC 3524578 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1623 | AC 3524578 | IR: JG   | ADDR:   19 | PC:  20 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1627 | AC 3524578 | IR: AND  | ADDR:   11 | PC:  21 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1629 | AC 3524578 | IR: JNZ  | ADDR:   21 | PC:  22 | DR:      25 | SP :    0 | mem[ADDR]      25 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1633 | AC 1089154 | IR: LD   | ADDR:   15 | PC:  23 | DR: 1089154 | SP :    0 | mem[ADDR] 1089154 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1637 | AC 4613732 | IR: ADD  | ADDR:   13 | PC:  24 | DR: 3524578 | SP :    0 | mem[ADDR] 3524578 | ToMEM : 2178309 |
+  DEBUG   machine:run_fetches   TICK: 1641 | AC 4613732 | IR: ST   | ADDR:   15 | PC:  25 | DR: 1089154 | SP :    0 | mem[ADDR] 4613732 | ToMEM : 4613732 |
+  DEBUG   machine:run_fetches   TICK: 1644 | AC 4613733 | IR: INC  | ADDR:   25 | PC:  26 | DR: inc     | SP :    0 | mem[ADDR] inc     | ToMEM : 4613732 |
+  DEBUG   machine:run_fetches   TICK: 1647 | AC 4613732 | IR: DEC  | ADDR:   26 | PC:  27 | DR: dec     | SP :    0 | mem[ADDR] dec     | ToMEM : 4613732 |
+  DEBUG   machine:run_fetches   TICK: 1651 | AC 3524578 | IR: LD   | ADDR:   13 | PC:  28 | DR: 3524578 | SP :    0 | mem[ADDR] 3524578 | ToMEM : 4613732 |
+  DEBUG   machine:run_fetches   TICK: 1655 | AC 3524578 | IR: ST   | ADDR:   14 | PC:  29 | DR: 2178309 | SP :    0 | mem[ADDR] 3524578 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1659 | AC 5702887 | IR: ADD  | ADDR:   12 | PC:  30 | DR: 2178309 | SP :    0 | mem[ADDR] 2178309 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1663 | AC 5702887 | IR: ST   | ADDR:   13 | PC:  31 | DR: 3524578 | SP :    0 | mem[ADDR] 5702887 | ToMEM : 5702887 |
+  DEBUG   machine:run_fetches   TICK: 1667 | AC 3524578 | IR: LD   | ADDR:   14 | PC:  32 | DR: 3524578 | SP :    0 | mem[ADDR] 3524578 | ToMEM : 5702887 |
+  DEBUG   machine:run_fetches   TICK: 1671 | AC 3524578 | IR: ST   | ADDR:   12 | PC:  33 | DR: 2178309 | SP :    0 | mem[ADDR] 3524578 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1674 | AC 3524578 | IR: JMP  | ADDR:   33 | PC:  17 | DR:      17 | SP :    0 | mem[ADDR]      17 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1678 | AC 5702887 | IR: LD   | ADDR:   13 | PC:  18 | DR: 5702887 | SP :    0 | mem[ADDR] 5702887 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1682 | AC 5702887 | IR: CMP  | ADDR:   10 | PC:  19 | DR: 4000000 | SP :    0 | mem[ADDR] 4000000 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1685 | AC 5702887 | IR: JG   | ADDR:   19 | PC:  34 | DR:      34 | SP :    0 | mem[ADDR]      34 | ToMEM : 3524578 |
+  DEBUG   machine:run_fetches   TICK: 1689 | AC 4613732 | IR: LD   | ADDR:   15 | PC:  35 | DR: 4613732 | SP :    0 | mem[ADDR] 4613732 | ToMEM : 3524578 |
+  DEBUG   machine:latch_output  numeric buffer: [] << 4613732
+  DEBUG   machine:run_fetches   TICK: 1692 | AC 4613732 | IR: OUT  | ADDR:   16 | PC:  36 | DR:       1 | SP :    0 | mem[ADDR]       1 | ToMEM : 3524578 |
+  INFO    machine:simulation    symbol_buffer: ''
+  INFO    machine:simulation    numeric_buffer: [4613732]

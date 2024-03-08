@@ -55,13 +55,6 @@ _start:
         st size
         jmp print2
 
-
-
-
-
-
-
-
     break:
         hlt
 
