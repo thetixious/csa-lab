@@ -1,0 +1,64 @@
+in_source: |-
+  org 10
+  out_port:
+      .word 0
+
+  _start:
+      in
+      loop:
+          out out_port
+          in
+          jz break
+          jmp loop
+      break:
+          hlt
+in_stdin: |-
+  hello
+out_code: |-
+  [{"index": 0, "opcode": "JMP", "value": 11, "is_indirect": false},
+  {"index": 10, "opcode": "NOP", "value": 0, "is_indirect": false},
+  {"index": 11, "opcode": "IN", "value": "in", "is_indirect": false},
+  {"index": 12, "opcode": "OUT", "value": 10, "is_indirect": false},
+  {"index": 13, "opcode": "IN", "value": "in", "is_indirect": false},
+  {"index": 14, "opcode": "JZ", "value": 16, "is_indirect": false},
+  {"index": 15, "opcode": "JMP", "value": 12, "is_indirect": false},
+  {"index": 16, "opcode": "HLT", "value": "hlt", "is_indirect": false}]
+out_stdout: |
+  hello
+  count of instructions:  21
+  count of ticks:  61
+out_log: |
+  DEBUG:root:TICK:    3 | AC       0 | IR: JMP  | ADDR:    0 | PC:  11 | DR:      11 | SP :    0 | mem[ADDR]      11 | ToMEM :   0 |
+  DEBUG:root:INPUT 104
+  DEBUG:root:TICK:    6 | AC     104 | IR: IN   | ADDR:   11 | PC:  12 | DR: in      | SP :    0 | mem[ADDR] in      | ToMEM :   0 |
+  DEBUG:root:symbols buffer:  << 'h'
+  DEBUG:root:TICK:    9 | AC     104 | IR: OUT  | ADDR:   10 | PC:  13 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :   0 |
+  DEBUG:root:INPUT 101
+  DEBUG:root:TICK:   12 | AC     101 | IR: IN   | ADDR:   13 | PC:  14 | DR: in      | SP :    0 | mem[ADDR] in      | ToMEM :   0 |
+  DEBUG:root:TICK:   14 | AC     101 | IR: JZ   | ADDR:   14 | PC:  15 | DR:      16 | SP :    0 | mem[ADDR]      16 | ToMEM :   0 |
+  DEBUG:root:TICK:   17 | AC     101 | IR: JMP  | ADDR:   15 | PC:  12 | DR:      12 | SP :    0 | mem[ADDR]      12 | ToMEM :   0 |
+  DEBUG:root:symbols buffer: h << 'e'
+  DEBUG:root:TICK:   20 | AC     101 | IR: OUT  | ADDR:   10 | PC:  13 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :   0 |
+  DEBUG:root:INPUT 108
+  DEBUG:root:TICK:   23 | AC     108 | IR: IN   | ADDR:   13 | PC:  14 | DR: in      | SP :    0 | mem[ADDR] in      | ToMEM :   0 |
+  DEBUG:root:TICK:   25 | AC     108 | IR: JZ   | ADDR:   14 | PC:  15 | DR:      16 | SP :    0 | mem[ADDR]      16 | ToMEM :   0 |
+  DEBUG:root:TICK:   28 | AC     108 | IR: JMP  | ADDR:   15 | PC:  12 | DR:      12 | SP :    0 | mem[ADDR]      12 | ToMEM :   0 |
+  DEBUG:root:symbols buffer: he << 'l'
+  DEBUG:root:TICK:   31 | AC     108 | IR: OUT  | ADDR:   10 | PC:  13 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :   0 |
+  DEBUG:root:INPUT 108
+  DEBUG:root:TICK:   34 | AC     108 | IR: IN   | ADDR:   13 | PC:  14 | DR: in      | SP :    0 | mem[ADDR] in      | ToMEM :   0 |
+  DEBUG:root:TICK:   36 | AC     108 | IR: JZ   | ADDR:   14 | PC:  15 | DR:      16 | SP :    0 | mem[ADDR]      16 | ToMEM :   0 |
+  DEBUG:root:TICK:   39 | AC     108 | IR: JMP  | ADDR:   15 | PC:  12 | DR:      12 | SP :    0 | mem[ADDR]      12 | ToMEM :   0 |
+  DEBUG:root:symbols buffer: hel << 'l'
+  DEBUG:root:TICK:   42 | AC     108 | IR: OUT  | ADDR:   10 | PC:  13 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :   0 |
+  DEBUG:root:INPUT 111
+  DEBUG:root:TICK:   45 | AC     111 | IR: IN   | ADDR:   13 | PC:  14 | DR: in      | SP :    0 | mem[ADDR] in      | ToMEM :   0 |
+  DEBUG:root:TICK:   47 | AC     111 | IR: JZ   | ADDR:   14 | PC:  15 | DR:      16 | SP :    0 | mem[ADDR]      16 | ToMEM :   0 |
+  DEBUG:root:TICK:   50 | AC     111 | IR: JMP  | ADDR:   15 | PC:  12 | DR:      12 | SP :    0 | mem[ADDR]      12 | ToMEM :   0 |
+  DEBUG:root:symbols buffer: hell << 'o'
+  DEBUG:root:TICK:   53 | AC     111 | IR: OUT  | ADDR:   10 | PC:  13 | DR:       0 | SP :    0 | mem[ADDR]       0 | ToMEM :   0 |
+  DEBUG:root:TICK:   56 | AC       0 | IR: IN   | ADDR:   13 | PC:  14 | DR: in      | SP :    0 | mem[ADDR] in      | ToMEM :   0 |
+  DEBUG:root:TICK:   59 | AC       0 | IR: JZ   | ADDR:   14 | PC:  16 | DR:      16 | SP :    0 | mem[ADDR]      16 | ToMEM :   0 |
+  INFO:root:symbol_buffer: 'hello'
+  INFO:root:numeric_buffer: []
+

@@ -106,7 +106,7 @@ class DataPath:
             "is_indirect": False,
         }
 
-    def alu_execution(self, op, mux_a: Mux = None, mux_b: Mux = None):
+    def alu_execution(self, op: object, mux_a: Mux = None, mux_b: Mux = None) -> object:
         route_a = None
         route_b = None
         if mux_a is not None:
