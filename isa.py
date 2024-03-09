@@ -8,26 +8,17 @@ class Opcode(str, Enum):
     AND: str = "AND"
     LD: str = "LD"
     ADD: str = "ADD"
-    SUB: str = "SUB"
     ST: str = "ST"
     DEC: str = "DEC"
     INC: str = "INC"
     PUSH: str = "PUSH"
     POP: str = "POP"
-    CALL: str = "CALL"
-    RET: str = "RET"
-    DIV: str = "DIV"
-    MUL: str = "MUL"
-    MOD: str = "MOD"
-    EQ: str = "EQ"
-    GT: str = "GT"
-    LT: str = "LT"
     IN: str = "IN"
     OUT: str = "OUT"
     JMP: str = "JMP"
+    JG: str = "JG"
     JZ: str = "JZ"
     JNZ: str = "JNZ"
-    JG: str = "JG"
     HLT: str = "HLT"
     CMP: str = "CMP"
     NOP: str = "NOP"
@@ -36,7 +27,7 @@ class Opcode(str, Enum):
         return str(self.value)
 
 
-branch_commands: str = [Opcode.JZ, Opcode.JNZ, Opcode.JMP]
+branch_commands: str = [Opcode.JZ, Opcode.JNZ, Opcode.JMP, Opcode.JG]
 non_operand_commands: str = [Opcode.INC, Opcode.DEC, Opcode.HLT, Opcode.POP, Opcode.PUSH, Opcode.IN]
 operand_commands: str = [Opcode.ADD, Opcode.OUT, Opcode.LD, Opcode.CMP, Opcode.ST, Opcode.AND]
 
@@ -45,21 +36,12 @@ def get_opcode(str_opcode) -> Opcode:
     return {
         "ld": Opcode.LD,
         "add": Opcode.ADD,
-        "sub": Opcode.SUB,
-        "st": Opcode.ST,
         "and": Opcode.AND,
+        "st": Opcode.ST,
         "dec": Opcode.DEC,
         "inc": Opcode.INC,
         "push": Opcode.PUSH,
         "pop": Opcode.POP,
-        "call": Opcode.CALL,
-        "ret": Opcode.RET,
-        "div": Opcode.DIV,
-        "mul": Opcode.MUL,
-        "mod": Opcode.MOD,
-        "eq": Opcode.EQ,
-        "gt": Opcode.GT,
-        "lt": Opcode.LT,
         "in": Opcode.IN,
         "out": Opcode.OUT,
         "jmp": Opcode.JMP,
