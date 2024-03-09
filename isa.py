@@ -28,8 +28,8 @@ class Opcode(str, Enum):
 
 
 branch_commands: str = [Opcode.JZ, Opcode.JNZ, Opcode.JMP, Opcode.JG]
-non_operand_commands: str = [Opcode.INC, Opcode.DEC, Opcode.HLT, Opcode.POP, Opcode.PUSH, Opcode.IN]
-operand_commands: str = [Opcode.ADD, Opcode.OUT, Opcode.LD, Opcode.CMP, Opcode.ST, Opcode.AND]
+non_operand_commands: str = [Opcode.INC, Opcode.DEC, Opcode.HLT, Opcode.POP, Opcode.PUSH]
+operand_commands: str = [Opcode.ADD, Opcode.OUT, Opcode.LD, Opcode.CMP, Opcode.ST, Opcode.AND, Opcode.IN]
 
 
 def get_opcode(str_opcode) -> Opcode:

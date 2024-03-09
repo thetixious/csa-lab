@@ -15,6 +15,8 @@ cycles:
     .word 0
 out_port:
     .word 0
+in_port:
+    .word 2
 
 _start:
     ld greet_mess
@@ -31,7 +33,7 @@ _start:
         jnz print
 
     input:
-        in
+        in in_port
         jz print2
         st (addr_for_mess)
         ld addr_for_mess

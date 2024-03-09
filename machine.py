@@ -196,9 +196,6 @@ class ControlUnit:
             self.data_path.alu_execution(ALUOpcode.DEC_A, mux_a=Mux.FROM_ACC)
             self.data_path.latch_acc(Mux.FROM_ACC)
             self.inc_ticks()
-        elif opcode == Opcode.IN:
-            self.data_path.latch_acc(Mux.FROM_INPUT)
-            self.inc_ticks()
         elif opcode == Opcode.PUSH:
             self.data_path.alu_execution(ALUOpcode.DEC_A, mux_b=Mux.FROM_SP)
             self.data_path.latch_sp()
@@ -267,6 +264,9 @@ class ControlUnit:
             self.inc_ticks()
             self.data_path.latch_dr()
             self.data_path.latch_output()
+        elif opcode == Opcode.IN:
+            self.data_path.latch_acc(Mux.FROM_INPUT)
+            self.inc_ticks()
 
     def branch_execute(self, opcode: Opcode, ps: dict):
         if opcode == Opcode.JMP:
