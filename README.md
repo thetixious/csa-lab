@@ -2,11 +2,7 @@
 
 Автор: Ри Аркадий Русланович, P33081
 
-**Исходный вариант:**
-```
-lisp | acc | neum | mc | tick | struct | stream | port | pstr | prob2 | 8bit 
-```
-**Упрощенный вариант:**
+Вариант
 ```
 asm | acc | neum | hw | instr | struct | stream | port | pstr | prob2 
 ```
